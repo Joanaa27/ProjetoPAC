@@ -44,16 +44,29 @@ def varnum(variavel):
 
 varnum("Glucose")
 
-#esta função permite ao utilizador escolher visualizar uma variavel numérica em função de uma das 2 variaveis(categoria) Outcome ou GlycemiaValues
+#esta função permite ao utilizador escolher visualizar um histograma de uma variavel numérica em função de uma das 2 variaveis(categoria) Outcome ou GlycemiaValues
 def varhue(variavel, categoria):
     sns.histplot(data=diabetesdf, x=variavel, hue= categoria, legend=True)
+    plt.title(f"Histogram of {variavel} in order to {categoria}")
     plt.show()
 
 varhue("Glucose", "Outcome")
 varhue("Glucose","GlycemiaValues")
 
-def varboxplot (variavel,categoria):
-    sns.boxplot(data=diabetesdf, x=variavel, y=categoria,hue=categoria)
-    plt.show()
+#função para efetuar boxplots de uma variavel numérica em função de uma das 2 variaveis(categoria) Outcome ou GlycemiaValues
+#def varboxplot (variavel,categoria):
+#    sns.boxplot(data=diabetesdf, x=variavel, y=categoria,hue=categoria, dodge=False)
+#    plt.show()
 
-varboxplot("Glucose","Outcome")
+#varboxplot("Glucose","Outcome")
+
+
+#boxplot de todas as variáveis em função da variavel "Outcome"
+#eliminar a coluna GlycemiaValues porque não queremos e não faz sentido aparecer na data frame
+diabetesbp= diabetesdf.drop("GlycemiaValues", axis=1)
+
+diabetes_melted = pd.melt(diabetesbp, id_vars = "Outcome", var_name = "variables", value_name = "value")
+
+plt.figure(figsize = (15, 15))
+sns.boxplot(data = diabetes_melted, x="variables", y="value", hue="Outcome")
+plt.show()
