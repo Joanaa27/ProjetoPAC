@@ -34,6 +34,7 @@ print(diabetes.loc[2])
 
 def varnum(variavel):
     print(variavel)
+    print(diabetesdf[variavel].describe())
     sns.histplot(data=diabetesdf, x=variavel,kde=True)
     plt.title(f"Histogram of {variavel}")
     plt.show()
@@ -43,7 +44,7 @@ def varnum(variavel):
 
 varnum("Glucose")
 
-#esta função permite ao utilizador escolher visualizar uma variavel numérica e função de 2 variaveis(categoria) outcome e GlycemiaValues
+#esta função permite ao utilizador escolher visualizar uma variavel numérica em função de uma das 2 variaveis(categoria) Outcome ou GlycemiaValues
 def varhue(variavel, categoria):
     sns.histplot(data=diabetesdf, x=variavel, hue= categoria, legend=True)
     plt.show()
@@ -52,7 +53,7 @@ varhue("Glucose", "Outcome")
 varhue("Glucose","GlycemiaValues")
 
 def varboxplot (variavel,categoria):
-    sns.boxplot(data=diabetesdf, x=variavel, hue=categoria, order=["0", "1"])
+    sns.boxplot(data=diabetesdf, x=variavel, y=categoria,hue=categoria)
     plt.show()
 
 varboxplot("Glucose","Outcome")
