@@ -5,13 +5,13 @@ import numpy as np
 import statsmodels
 import seaborn as sns
 import matplotlib.pyplot as plt
+import plotly.express as px
 
 #Leitura de base de dados
 diabetes = pd.read_csv("diabetes.csv")
 variaveis = diabetes.columns
 diabetesdf=pd.DataFrame(data=diabetes, columns=diabetes.columns)
 
-print("bla")
 #Criação da nova variável categoria tendo em conta os valores de glicemia
 x=[]
 for i in diabetes["Glucose"]:
@@ -29,7 +29,7 @@ for i in diabetes["Glucose"]:
 #Adição da nova variável à base de dados
 diabetes.insert(loc=2, column="GlycemiaValues", value=x)
 print(diabetes)
-
+'''
 #heatmap - avaliação de possíveis correlações
 # Create a pivot table
 matriz=diabetesdf.pivot("Pregnancies", "Glucose", "BloodPressure")
@@ -54,9 +54,27 @@ for i in variaveis:
     plt.title(f'"{i}" em função do Outcome')
 plt.plot()
 plt.show()
+'''
+#Histogramas + boxplots para uma variável numerica em função do outcome
+fig = px.histogram(diabetesdf, x = 'Glucose',
+                   color = 'Outcome',
+                   marginal = 'box',
+                   barmode= 'overlay',
+                   histnorm = 'density'
+                   )
 
+fig.update_layout(
+    title_font_color="black",
+    legend_title_font_color="green",
+    title={
+        'text': "Glucose Histogram per Outcome",
+        'x':0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'},
+)
+fig.show()
 
-
+'''
 #grafico circular do outcome 0 e 1  e da variavel criada "GlycemiaValues"
 colors = sns.color_palette('pastel')
 labels= 'Diabetic','Not Diabetic'
@@ -73,4 +91,4 @@ plt.show()
 #heatmap - avaliação de possíveis correlações
 sns.heatmap(data=diabetes)
 plt.show(sns)
-
+'''
