@@ -53,7 +53,7 @@ varhue("Glucose", "Outcome")
 varhue("Glucose","GlycemiaValues")
 
 def varboxplot (variavel,categoria):
-    sns.boxplot(data=diabetesdf, x=variavel, y=categoria,hue=categoria)
+    sns.boxplot(data=diabetesdf, x=variavel, y=categoria,hue=categoria, dodge=False)
     plt.show()
 
 varboxplot("Glucose","Outcome")
