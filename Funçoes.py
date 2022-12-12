@@ -11,6 +11,8 @@ variaveis = diabetes.columns
 diabetesdf=pd.DataFrame(data=diabetes, columns=diabetes.columns)
 x=[]
 
+
+
 print(diabetesdf)
 for i in diabetes["Glucose"]:
     valor = ""
@@ -25,6 +27,10 @@ for i in diabetes["Glucose"]:
     x.append(valor)
 
 diabetes.insert(loc=2, column="GlycemiaValues", value=x)
+
+
+
+
 print(diabetes)
 
 #análise para cada variável numérica, breve descrição estatística (média, quartis, etc) e histograma para observar a distribuição4
@@ -69,4 +75,46 @@ diabetes_melted = pd.melt(diabetesbp, id_vars = "Outcome", var_name = "variables
 
 plt.figure(figsize = (15, 15))
 sns.boxplot(data = diabetes_melted, x="variables", y="value", hue="Outcome")
+plt.title("Boxplot of all numeric variables in order to Outcome")
+plt.show()
+
+"""
+valores = []
+for i in diabetesdf["GlycemiaValues"]:
+    val = 0
+    if i=="Hypoglycemia":
+        val = 0
+    elif i == "Normal":
+        val = 1
+    elif i== "Pre-diabetes":
+        val= 2
+    else:
+        val= 3
+    valores.append(val)
+
+diabetesdf2=diabetesdf
+diabetesdf2.insert(loc=3, column="glycvalues", value=valores)
+
+print("diabetesdf2")
+print(diabetesdf2)
+
+diabetesbp2= diabetesdf2.drop("Outcome", axis=1)
+
+print("diabetesbp2")
+print(diabetesbp2)
+
+diabetes_melt= pd.melt(diabetesbp2, id_vars = "glycvalues", var_name = "variables", value_name = "value")
+
+print("diabetesmelt")
+print(diabetes_melt)
+#em função de GlycemiaValues
+plt.figure(figsize = (15, 15))
+sns.boxplot(data = diabetes_melt, x="variables", y="value", hue="glycvalues")
+plt.title("Boxplot of all numeric variables in order to GlycemiaValues")
+plt.show()
+"""
+
+#swarm plot
+plt.figure(figsize = (15, 15))
+sns.swarmplot(x = "variables", y = "value", hue = "Outcome", data = diabetes_melted)
 plt.show()
