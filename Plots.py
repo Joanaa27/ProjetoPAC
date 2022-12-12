@@ -9,7 +9,7 @@ import plotly.express as px
 
 #Leitura de base de dados
 diabetes = pd.read_csv("diabetes.csv")
-variaveis = diabetes.columns
+variaveis = diabetes.columns[:8]
 diabetesdf=pd.DataFrame(data=diabetes, columns=diabetes.columns)
 
 #Criação da nova variável categoria tendo em conta os valores de glicemia
@@ -29,12 +29,6 @@ for i in diabetes["Glucose"]:
 #Adição da nova variável à base de dados
 diabetes.insert(loc=2, column="GlycemiaValues", value=x)
 print(diabetes)
-'''
-#heatmap - avaliação de possíveis correlações
-# Create a pivot table
-matriz=diabetesdf.pivot("Pregnancies", "Glucose", "BloodPressure")
-sns.heatmap(matriz, annot=True, fmt=".1f")
-plt.show()
 
 #separam o outcome 0 de 1
 df_d0 = diabetes[diabetes['Outcome'] == 0]
@@ -44,7 +38,13 @@ df_d1 = diabetes[diabetes['Outcome'] == 1]
 df_d0_samp = df_d0.sample(268,replace = False)
 df_bal = pd.concat([df_d1, df_d0_samp])
 
-#histograma com função de densidade da variável Pregnancies, BMI e DiabetesPedigreeFunction
+plt.figure()
+sns.countplot(x = diabetesdf["Outcome"], data = diabetesdf, saturation = 1)
+plt.title("Distribution of Outcome Values")
+plt.show()
+
+'''
+#histograma com função de densidade das variáveis em função do outcome
 cores = {0: 'blue', 1: 'green'}
 counter = 0
 for i in variaveis:
@@ -54,8 +54,8 @@ for i in variaveis:
     plt.title(f'"{i}" em função do Outcome')
 plt.plot()
 plt.show()
-'''
-#Histogramas + boxplots para uma variável numerica em função do outcome
+
+#Histogramas + boxplots (lado a lado) para uma variável numerica em função do outcome
 fig = px.histogram(diabetesdf, x = 'Glucose',
                    color = 'Outcome',
                    marginal = 'box',
@@ -73,6 +73,22 @@ fig.update_layout(
         'yanchor': 'top'},
 )
 fig.show()
+#Problema: abre uma página no navegador e temos de ver se é dessa maneira que queremos visualizar o gráfico
+'''
+
+#Matriz de correlações
+corr=diabetesdf.corr().round(2)
+
+sns.set(font_scale=1.15)
+plt.figure(figsize=(14, 10))
+#sns.color_palette('pastel')
+sns.set_palette('pastel')
+sns.set_style('white')
+mask = np.zeros_like(corr)
+mask[np.triu_indices_from(mask)] = True
+sns.heatmap(corr,annot=True,cmap='gist_yarg_r',mask=mask,cbar=True)
+plt.title('Correlation Plot')
+plt.show()
 
 '''
 #grafico circular do outcome 0 e 1  e da variavel criada "GlycemiaValues"
