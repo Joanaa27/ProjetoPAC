@@ -1,3 +1,4 @@
+#Importação de pacotes
 import pandas as pd
 from pandas_profiling import ProfileReport
 import numpy as np
@@ -5,9 +6,13 @@ import statsmodels
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+#Leitura de base de dados
 diabetes = pd.read_csv("diabetes.csv")
 variaveis = diabetes.columns
 diabetesdf=pd.DataFrame(data=diabetes, columns=diabetes.columns)
+
+print("bla")
+#Criação da nova variável categoria tendo em conta os valores de glicemia
 x=[]
 for i in diabetes["Glucose"]:
     valor = ""
@@ -21,6 +26,7 @@ for i in diabetes["Glucose"]:
         valor= "Diabetes"
     x.append(valor)
 
+#Adição da nova variável à base de dados
 diabetes.insert(loc=2, column="GlycemiaValues", value=x)
 print(diabetes)
 
