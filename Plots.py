@@ -76,6 +76,13 @@ fig.show()
 #Problema: abre uma página no navegador e temos de ver se é dessa maneira que queremos visualizar o gráfico
 '''
 
+# Pairplot
+plt.figure()
+sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde")
+plt.title('Pairplot')
+plt.show()
+
+'''
 #Matriz de correlações
 corr=diabetesdf.corr().round(2)
 
@@ -90,7 +97,7 @@ sns.heatmap(corr,annot=True,cmap='gist_yarg_r',mask=mask,cbar=True)
 plt.title('Correlation Plot')
 plt.show()
 
-'''
+
 #grafico circular do outcome 0 e 1  e da variavel criada "GlycemiaValues"
 colors = sns.color_palette('pastel')
 labels= 'Not Diabetic','Diabetic'
