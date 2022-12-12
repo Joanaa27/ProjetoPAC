@@ -93,7 +93,7 @@ plt.show()
 '''
 #grafico circular do outcome 0 e 1  e da variavel criada "GlycemiaValues"
 colors = sns.color_palette('pastel')
-labels= 'Diabetic','Not Diabetic'
+labels= 'Not Diabetic','Diabetic'
 plt.figure(figsize=(10,7))
 plt.pie(diabetes['Outcome'].value_counts(),labels=labels,colors=colors,autopct='%0.02f%%')
 plt.legend()
