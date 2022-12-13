@@ -1,4 +1,5 @@
 #Importação de pacotes
+import missingno as msno
 import pandas as pd
 from pandas_profiling import ProfileReport
 import numpy as np
@@ -11,6 +12,12 @@ import plotly.express as px
 diabetes = pd.read_csv("diabetes.csv")
 variaveis = diabetes.columns[:8]
 diabetesdf=pd.DataFrame(data=diabetes, columns=diabetes.columns)
+
+'''
+#Checking missing values and data types
+msno.matrix(diabetesdf)
+plt.show()
+'''
 
 #Criação da nova variável categoria tendo em conta os valores de glicemia
 x=[]
@@ -37,13 +44,29 @@ df_d1 = diabetes[diabetes['Outcome'] == 1]
 #and random sample the same amount of instances from the higher represented '0' class to match the available '1' class instances
 df_d0_samp = df_d0.sample(268,replace = False)
 df_bal = pd.concat([df_d1, df_d0_samp])
-
+'''
+#Gráfico de barras com a contagem de outcomes
 plt.figure()
 sns.countplot(x = diabetesdf["Outcome"], data = diabetesdf, saturation = 1)
 plt.title("Distribution of Outcome Values")
 plt.show()
+'''
+#gráfico de barras para GlycemiaValues -- está a dar erro
+ax = diabetesdf['GlycemiaValues'].value_counts().plot(kind='bar', figsize=(14,8), title="Number for each Owner Name")
+plt.show()
+#glyval=diabetes['GlycemiaValues'].value_counts()
+#sns.barplot(data=diabetes, x="GlycemiaValues", y=diabetes['GlycemiaValues'].value_counts())
+#plt.show()
 
 '''
+#grafico circular do outcome 0 e 1  e da variavel criada "GlycemiaValues"
+colors = sns.color_palette('pastel')
+labels= 'Not Diabetic','Diabetic'
+plt.figure(figsize=(10,7))
+plt.pie(diabetes['Outcome'].value_counts(),labels=labels,colors=colors,autopct='%0.02f%%')
+plt.legend()
+plt.show()
+
 #histograma com função de densidade das variáveis em função do outcome
 cores = {0: 'blue', 1: 'green'}
 counter = 0
@@ -74,7 +97,12 @@ fig.update_layout(
 )
 fig.show()
 #Problema: abre uma página no navegador e temos de ver se é dessa maneira que queremos visualizar o gráfico
-'''
+
+#Scatterplots entre as variáveis
+plt.plot(diabetesdf, x='Glucose', y='BMI', color='blue')
+plt.title('Gráfico de dispersão de duas varíaveis')
+plt.show()
+
 
 # Pairplot
 plt.figure()
@@ -82,7 +110,6 @@ sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde")
 plt.title('Pairplot')
 plt.show()
 
-'''
 #Matriz de correlações
 corr=diabetesdf.corr().round(2)
 
@@ -95,15 +122,6 @@ mask = np.zeros_like(corr)
 mask[np.triu_indices_from(mask)] = True
 sns.heatmap(corr,annot=True,cmap='gist_yarg_r',mask=mask,cbar=True)
 plt.title('Correlation Plot')
-plt.show()
-
-
-#grafico circular do outcome 0 e 1  e da variavel criada "GlycemiaValues"
-colors = sns.color_palette('pastel')
-labels= 'Not Diabetic','Diabetic'
-plt.figure(figsize=(10,7))
-plt.pie(diabetes['Outcome'].value_counts(),labels=labels,colors=colors,autopct='%0.02f%%')
-plt.legend()
 plt.show()
 
 #gráfico de barras para GlycemiaValues -- está a dar erro
