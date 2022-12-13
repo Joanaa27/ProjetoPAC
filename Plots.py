@@ -44,7 +44,6 @@ df_d1 = diabetes[diabetes['Outcome'] == 1]
 #and random sample the same amount of instances from the higher represented '0' class to match the available '1' class instances
 df_d0_samp = df_d0.sample(268,replace = False)
 df_bal = pd.concat([df_d1, df_d0_samp])
-
 '''
 #Gráfico de barras com a contagem de outcomes
 plt.figure()
@@ -103,15 +102,14 @@ fig.show()
 plt.plot(diabetesdf, x='Glucose', y='BMI', color='blue')
 plt.title('Gráfico de dispersão de duas varíaveis')
 plt.show()
-'''
-cores = {0: 'blue', 1: 'green'}
+
 # Pairplot
+cores = {0: 'blue', 1: 'green'}
 plt.figure()
-sns.set(style="darkgrid")
+sns.set(font_scale=0.7, style="darkgrid")
 sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde", palette = cores, plot_kws = {"s": 8})
 plt.title('Pairplot')
 plt.show()
-
 '''
 
 #Matriz de correlações
@@ -126,5 +124,13 @@ mask[np.triu_indices_from(mask)] = True
 sns.heatmap(corr,annot=True,cmap='gist_yarg_r',mask=mask,cbar=True)
 plt.title('Correlation Plot')
 plt.show()
-'''
 
+corr=diabetesdf.corr().round(2)
+
+plt.figure(figsize=(14, 10))
+sns.set(font_scale=1.15, palette='pastel', style='darkgrid')
+mask = np.zeros_like(corr)
+mask[np.triu_indices_from(mask)] = True
+sns.heatmap(corr,annot=True,cmap='gist_yarg_r',mask=mask,cbar=True)
+plt.title('Correlation Plot')
+plt.show()
