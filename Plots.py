@@ -44,21 +44,20 @@ df_d1 = diabetes[diabetes['Outcome'] == 1]
 #and random sample the same amount of instances from the higher represented '0' class to match the available '1' class instances
 df_d0_samp = df_d0.sample(268,replace = False)
 df_bal = pd.concat([df_d1, df_d0_samp])
+
 '''
 #Gráfico de barras com a contagem de outcomes
 plt.figure()
 sns.countplot(x = diabetesdf["Outcome"], data = diabetesdf, saturation = 1)
 plt.title("Distribution of Outcome Values")
 plt.show()
-'''
-#gráfico de barras para GlycemiaValues -- está a dar erro
-ax = diabetesdf['GlycemiaValues'].value_counts().plot(kind='bar', figsize=(14,8), title="Number for each Owner Name")
-plt.show()
-#glyval=diabetes['GlycemiaValues'].value_counts()
-#sns.barplot(data=diabetes, x="GlycemiaValues", y=diabetes['GlycemiaValues'].value_counts())
-#plt.show()
 
-'''
+#Gráfico de barras para a GlycemiaValues
+sns.set(style="darkgrid")
+ax = sns.countplot(x="GlycemiaValues", data=diabetesdf, order=['Hypoglycemia','Normal','Pre-diabetes'])
+plt.title('Gráfico de barras para a variável categoria GlycemiaValues')
+plt.show()
+
 #grafico circular do outcome 0 e 1  e da variavel criada "GlycemiaValues"
 colors = sns.color_palette('pastel')
 labels= 'Not Diabetic','Diabetic'
@@ -66,6 +65,7 @@ plt.figure(figsize=(10,7))
 plt.pie(diabetes['Outcome'].value_counts(),labels=labels,colors=colors,autopct='%0.02f%%')
 plt.legend()
 plt.show()
+######Nota! Gráfico redundante porque já temos um barplot a dizer isto --> escolher qual usar
 
 #histograma com função de densidade das variáveis em função do outcome
 cores = {0: 'blue', 1: 'green'}
@@ -73,6 +73,7 @@ counter = 0
 for i in variaveis:
     counter += 1
     print(counter, ':', i)
+    sns.set(style="darkgrid")
     sns.displot(data = df_bal, kde=True, x = diabetes[str(i)], hue='Outcome', palette=cores)
     plt.title(f'"{i}" em função do Outcome')
 plt.plot()
@@ -102,34 +103,28 @@ fig.show()
 plt.plot(diabetesdf, x='Glucose', y='BMI', color='blue')
 plt.title('Gráfico de dispersão de duas varíaveis')
 plt.show()
-
-
+'''
+cores = {0: 'blue', 1: 'green'}
 # Pairplot
 plt.figure()
-sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde")
+sns.set(style="darkgrid")
+sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde", palette = cores, plot_kws = {"s": 8})
 plt.title('Pairplot')
 plt.show()
+
+'''
 
 #Matriz de correlações
 corr=diabetesdf.corr().round(2)
 
-sns.set(font_scale=1.15)
 plt.figure(figsize=(14, 10))
 #sns.color_palette('pastel')
 sns.set_palette('pastel')
-sns.set_style('white')
+sns.set(style="darkgrid")
 mask = np.zeros_like(corr)
 mask[np.triu_indices_from(mask)] = True
 sns.heatmap(corr,annot=True,cmap='gist_yarg_r',mask=mask,cbar=True)
 plt.title('Correlation Plot')
 plt.show()
-
-#gráfico de barras para GlycemiaValues -- está a dar erro
-glyval=diabetes['GlycemiaValues'].value_counts()
-sns.barplot(data=diabetes, x="GlycemiaValues", y=diabetes['GlycemiaValues'].value_counts())
-plt.show()
-
-#heatmap - avaliação de possíveis correlações
-sns.heatmap(data=diabetes)
-plt.show(sns)
 '''
+
