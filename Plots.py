@@ -10,7 +10,7 @@ import plotly.express as px
 
 #Leitura de base de dados
 diabetes = pd.read_csv("diabetes.csv")
-variaveis = diabetes.columns[:8]
+variaveisnum = diabetes.columns[:8]
 diabetesdf=pd.DataFrame(data=diabetes, columns=diabetes.columns)
 
 '''
@@ -69,7 +69,7 @@ plt.show()
 #histograma com função de densidade das variáveis em função do outcome
 cores = {0: 'blue', 1: 'green'}
 counter = 0
-for i in variaveis:
+for i in variaveisnum:
     counter += 1
     print(counter, ':', i)
     sns.set(style="darkgrid")
@@ -111,29 +111,18 @@ sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde", palette = cores, pl
 plt.title('Pairplot')
 plt.show()
 '''
-"""
+
 #Matriz de correlações
-corr=diabetesdf.corr().round(2)
-
+corr = diabetesdf.corr().round(2)
 plt.figure(figsize=(14, 10))
-#sns.color_palette('pastel')
-sns.set_palette('pastel')
-sns.set(style="darkgrid")
+sns.set(font_scale=1.15)
 mask = np.zeros_like(corr)
 mask[np.triu_indices_from(mask)] = True
-sns.heatmap(corr,annot=True,cmap='gist_yarg_r',mask=mask,cbar=True)
-plt.title('Correlation Plot')
+sns.heatmap(corr, annot = True, cmap = 'BuPu', mask = mask, cbar = True)
+plt.title('Matriz de correlações')
 plt.show()
 
-plt.figure(figsize=(14, 10))
-sns.set(font_scale=1.15, palette='pastel', style='darkgrid')
-mask = np.zeros_like(corr)
-mask[np.triu_indices_from(mask)] = True
-sns.heatmap(corr,annot=True,cmap='gist_yarg_r',mask=mask,cbar=True)
-plt.title('Correlation Plot')
-plt.show()
-"""
-
+'''
 #função que executa gráficos de dispersão entre as variaveis NUMERICAS escolhidas pelo utilizador
 def varscatter(variavel_1,variavel_2):
     print(f"Variável no eixo dos xx: {variavel_1} \nVariável no eixo dos yy: {variavel_2}")
@@ -156,4 +145,4 @@ varscatter2("Glucose","BMI","GlycemiaValues")
 sns.set_theme(style="ticks")
 sns.pairplot(diabetesdf, hue="Outcome")
 plt.show()
-
+'''
