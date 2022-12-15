@@ -71,7 +71,6 @@ print(diabetesdf)
 palete1 = {0: 'blue', 1: 'green'}
 palete2 = {'Hypoglycemia': 'blue', 'Normal': 'green', 'Pre-diabetes': 'orange'}
 
-'''
 #Gráfico de barras para a contagem de outcomes
 sns.set(style="darkgrid")
 sns.countplot(data = diabetesdf, x = diabetesdf["Outcome"], palette='pastel', saturation = 2)
@@ -99,7 +98,7 @@ plt.figure(figsize=(10,7))
 plt.pie(diabetes['GlycemiaValues'].value_counts(), labels = labels, colors = colors, autopct = '%0.01f%%')
 plt.legend()
 plt.show()
-'''
+
 #Histograma e boxplot para  cada variável numérica
 colors = sns.color_palette('pastel')
 
@@ -122,7 +121,7 @@ def varhue(variavel, categoria):
 
 varhue("Glucose", "Outcome")
 varhue("Glucose","GlycemiaValues")
-'''
+
 #Função para remover outliers
 def outlier_removal(self,data):
     def outlier_limits(col):
@@ -137,10 +136,12 @@ def outlier_removal(self,data):
             data[column] = np.where(data[column]> UL | data[column]< LL, np.nan,data[column])
     return data
 
+#é suposto fazermos um gráfico novamente só para mostrar que conseguimos remover os outliers?
+
 #fazer boxplot para verificação
 fig , ax = plt.subplots(figsize = (20,20))
 sns.boxplot(data = diabetesdf, ax = ax)
-'''
+
 
 #Função que executa gráficos de dispersão entre as variaveis NUMERICAS escolhidas pelo utilizador
 def varscatter(variavel_1,variavel_2):
@@ -166,18 +167,18 @@ sns.set(font_scale=0.7, style="darkgrid")
 sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde", palette = palete1, plot_kws = {"s": 8})
 plt.title('Pairplot')
 plt.show()
-'''
+
 #matriz de graficos de dispersão que inclui todas as variaveis - tenho de melhorar
 sns.set_theme(style="ticks")
 sns.pairplot(diabetesdf, hue="Outcome")
 plt.show()
-'''
+
 #Matriz de correlações
 corr = diabetesdf.corr().round(2)
 plt.figure(figsize=(14, 10))
 sns.set(font_scale=1.15)
 mask = np.zeros_like(corr)
 mask[np.triu_indices_from(mask)] = True
-sns.heatmap(corr, corner = False, annot = True, cmap = 'BuPu', mask = mask, cbar = True)
+sns.heatmap(corr, annot = True, cmap = 'BuPu', mask = mask, cbar = True)
 plt.title('Matriz de correlações')
 plt.show()

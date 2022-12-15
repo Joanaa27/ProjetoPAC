@@ -69,7 +69,7 @@ for i in variaveisnum:
     plt.title(f'"{i}" em função do Outcome')
 plt.plot()
 plt.show()
-
+'''
 #Histogramas + boxplots (lado a lado) para uma variável numerica em função do outcome
 fig = px.histogram(diabetesdf, x = 'Glucose',
                    color = 'Outcome',
@@ -89,7 +89,7 @@ fig.update_layout(
 )
 fig.show()
 #Problema: abre uma página no navegador e temos de ver se é dessa maneira que queremos visualizar o gráfico
-
+'''
 
 # Pairplot
 cores = {0: 'blue', 1: 'green'}
