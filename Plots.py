@@ -44,7 +44,7 @@ df_d1 = diabetes[diabetes['Outcome'] == 1]
 #and random sample the same amount of instances from the higher represented '0' class to match the available '1' class instances
 df_d0_samp = df_d0.sample(268,replace = False)
 df_bal = pd.concat([df_d1, df_d0_samp])
-'''
+
 #Gráfico de barras com a contagem de outcomes
 plt.figure()
 sns.countplot(x = diabetesdf["Outcome"], data = diabetesdf, saturation = 1)
@@ -77,7 +77,7 @@ for i in variaveisnum:
     plt.title(f'"{i}" em função do Outcome')
 plt.plot()
 plt.show()
-
+'''
 #Histogramas + boxplots (lado a lado) para uma variável numerica em função do outcome
 fig = px.histogram(diabetesdf, x = 'Glucose',
                    color = 'Outcome',
@@ -110,7 +110,6 @@ sns.set(font_scale=0.7, style="darkgrid")
 sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde", palette = cores, plot_kws = {"s": 8})
 plt.title('Pairplot')
 plt.show()
-'''
 
 #Matriz de correlações
 corr = diabetesdf.corr().round(2)
@@ -122,7 +121,6 @@ sns.heatmap(corr, annot = True, cmap = 'BuPu', mask = mask, cbar = True)
 plt.title('Matriz de correlações')
 plt.show()
 
-'''
 #função que executa gráficos de dispersão entre as variaveis NUMERICAS escolhidas pelo utilizador
 def varscatter(variavel_1,variavel_2):
     print(f"Variável no eixo dos xx: {variavel_1} \nVariável no eixo dos yy: {variavel_2}")
@@ -141,7 +139,7 @@ def varscatter2(variavel1, variavel2, varcategorical):
 varscatter2("Glucose","BMI","Outcome")
 varscatter2("Glucose","BMI","GlycemiaValues")
 
-#matriz de graficos de dispersão que inclui todas as variaveis - teno de melhorar
+#matriz de graficos de dispersão que inclui todas as variaveis - tenho de melhorar
 sns.set_theme(style="ticks")
 sns.pairplot(diabetesdf, hue="Outcome")
 plt.show()
