@@ -78,7 +78,6 @@ sns.boxplot(data = diabetes_melted, x="variables", y="value", hue="Outcome")
 plt.title("Boxplot of all numeric variables in order to Outcome")
 plt.show()
 
-"""
 valores = []
 for i in diabetesdf["GlycemiaValues"]:
     val = 0
@@ -112,7 +111,6 @@ plt.figure(figsize = (15, 15))
 sns.boxplot(data = diabetes_melt, x="variables", y="value", hue="glycvalues")
 plt.title("Boxplot of all numeric variables in order to GlycemiaValues")
 plt.show()
-"""
 
 #swarm plot
 plt.figure(figsize = (15, 15))

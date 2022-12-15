@@ -1,23 +1,14 @@
 #Importação de pacotes
-import missingno as msno
 import pandas as pd
 from pandas_profiling import ProfileReport
 import numpy as np
-import statsmodels
-import seaborn as sns
 import matplotlib.pyplot as plt
-import plotly.express as px
+import seaborn as sns
 
 #Leitura de base de dados
 diabetes = pd.read_csv("diabetes.csv")
 variaveisnum = diabetes.columns[:8]
 diabetesdf=pd.DataFrame(data=diabetes, columns=diabetes.columns)
-
-'''
-#Checking missing values and data types
-msno.matrix(diabetesdf)
-plt.show()
-'''
 
 #Criação da nova variável categoria tendo em conta os valores de glicemia
 x=[]
@@ -68,6 +59,7 @@ plt.show()
 
 #histograma com função de densidade das variáveis em função do outcome
 cores = {0: 'blue', 1: 'green'}
+cores2 = {'Hypoglycemia': 'blue', 'Normal': 'green', 'Pre-diabetes': 'yellow'}
 counter = 0
 for i in variaveisnum:
     counter += 1
@@ -77,7 +69,7 @@ for i in variaveisnum:
     plt.title(f'"{i}" em função do Outcome')
 plt.plot()
 plt.show()
-'''
+
 #Histogramas + boxplots (lado a lado) para uma variável numerica em função do outcome
 fig = px.histogram(diabetesdf, x = 'Glucose',
                    color = 'Outcome',
@@ -98,10 +90,6 @@ fig.update_layout(
 fig.show()
 #Problema: abre uma página no navegador e temos de ver se é dessa maneira que queremos visualizar o gráfico
 
-#Scatterplots entre as variáveis
-plt.plot(diabetesdf, x='Glucose', y='BMI', color='blue')
-plt.title('Gráfico de dispersão de duas varíaveis')
-plt.show()
 
 # Pairplot
 cores = {0: 'blue', 1: 'green'}
@@ -110,7 +98,12 @@ sns.set(font_scale=0.7, style="darkgrid")
 sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde", palette = cores, plot_kws = {"s": 8})
 plt.title('Pairplot')
 plt.show()
-
+'''
+#matriz de graficos de dispersão que inclui todas as variaveis - tenho de melhorar
+sns.set_theme(style="ticks")
+sns.pairplot(diabetesdf, hue="Outcome")
+plt.show()
+'''
 #Matriz de correlações
 corr = diabetesdf.corr().round(2)
 plt.figure(figsize=(14, 10))
@@ -139,8 +132,4 @@ def varscatter2(variavel1, variavel2, varcategorical):
 varscatter2("Glucose","BMI","Outcome")
 varscatter2("Glucose","BMI","GlycemiaValues")
 
-#matriz de graficos de dispersão que inclui todas as variaveis - tenho de melhorar
-sns.set_theme(style="ticks")
-sns.pairplot(diabetesdf, hue="Outcome")
-plt.show()
-'''
+##Nestas funções, as variáveis deviam ser pedidas pelo utlizador, ou seja input, e depois eram feitas verificações caso o nome da variável não fosse correto
