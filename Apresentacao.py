@@ -66,11 +66,11 @@ for i in diabetesdf["Glucose"]:
 diabetesdf.insert(loc=2, column="GlycemiaValues", value=x)
 print(diabetesdf)
 #Vai ser adicionada uma nova coluna que vai converter os valores de glucose em 4 patamares
-'''
+
 #Palete de cores! - a palete de cores só é usada em gráfico em função do Outcome (palete1) ou dos Glycemia Values (palete2)
 palete1 = {0: 'blue', 1: 'green'}
 palete2 = {'Hypoglycemia': 'blue', 'Normal': 'green', 'Pre-diabetes': 'orange'}
-'''
+
 '''
 #Gráfico de barras para a contagem de outcomes
 sns.set(style="darkgrid")
@@ -141,3 +141,43 @@ def outlier_removal(self,data):
 fig , ax = plt.subplots(figsize = (20,20))
 sns.boxplot(data = diabetesdf, ax = ax)
 '''
+
+#Função que executa gráficos de dispersão entre as variaveis NUMERICAS escolhidas pelo utilizador
+def varscatter(variavel_1,variavel_2):
+    print(f"Variável no eixo dos xx: {variavel_1} \nVariável no eixo dos yy: {variavel_2}")
+    sns.scatterplot(data=diabetesdf, x=variavel_1, y=variavel_2)
+    plt.title(f"Scatterplot of {variavel_1} by {variavel_2}")
+    plt.show()
+
+varscatter("Glucose","BMI")
+
+#caso o utilizador opte por fazer em função ou do outcome ou da variavel "GlycemiaValues" incorporar esta função
+def varscatter2(variavel1, variavel2, varcategorical):
+    sns.scatterplot(data=diabetesdf, x=variavel1, y=variavel2, hue=varcategorical)
+    plt.title(f"Scatterplot of {variavel1} by {variavel2} in order to {varcategorical}")
+    plt.show()
+
+varscatter2("Glucose","BMI","Outcome")
+varscatter2("Glucose","BMI","GlycemiaValues")
+
+#Pairplot
+plt.figure()
+sns.set(font_scale=0.7, style="darkgrid")
+sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde", palette = palete1, plot_kws = {"s": 8})
+plt.title('Pairplot')
+plt.show()
+'''
+#matriz de graficos de dispersão que inclui todas as variaveis - tenho de melhorar
+sns.set_theme(style="ticks")
+sns.pairplot(diabetesdf, hue="Outcome")
+plt.show()
+'''
+#Matriz de correlações
+corr = diabetesdf.corr().round(2)
+plt.figure(figsize=(14, 10))
+sns.set(font_scale=1.15)
+mask = np.zeros_like(corr)
+mask[np.triu_indices_from(mask)] = True
+sns.heatmap(corr, corner = False, annot = True, cmap = 'BuPu', mask = mask, cbar = True)
+plt.title('Matriz de correlações')
+plt.show()
