@@ -53,17 +53,17 @@ https://www.mayoclinic.org/tests-procedures/glucose-tolerance-test/about/pac-203
 x=[]
 for i in diabetesdf["Glucose"]:
     valor = ""
-    if i<=70:
-        valor= "Hypoglycemia"
-    elif i<=140:
-        valor= "Normal"
-    elif i<=199:
-        valor= "Pre-diabetes"
+    if i <= 70:
+        valor = "Hypoglycemia"
+    elif i <= 140:
+        valor = "Normal"
+    elif i <= 199:
+        valor = "Pre-diabetes"
     else:
-        valor= "Diabetes"
+        valor = "Diabetes"
     x.append(valor)
 
-diabetesdf.insert(loc=2, column="GlycemiaValues", value=x)
+diabetesdf.insert(loc = 2, column = "GlycemiaValues", value = x)
 print(diabetesdf)
 #Vai ser adicionada uma nova coluna que vai converter os valores de glucose em 4 patamares
 
@@ -72,29 +72,29 @@ palete1 = {0: 'blue', 1: 'green'}
 palete2 = {'Hypoglycemia': 'blue', 'Normal': 'green', 'Pre-diabetes': 'orange'}
 
 #Gráfico de barras para a contagem de outcomes
-sns.set(style="darkgrid")
-sns.countplot(data = diabetesdf, x = diabetesdf["Outcome"], palette='pastel', saturation = 2)
+sns.set(style = "darkgrid")
+sns.countplot(data = diabetesdf, x = diabetesdf["Outcome"], palette = 'pastel', saturation = 2)
 plt.title("Distribution of Outcome Values")
 plt.show()
 
 #Gráfico circular para a variável Outcome
 colors = sns.color_palette('pastel')
-labels= 'Non-Diabetic','Diabetic'
-plt.figure(figsize=(10,7))
+labels = 'Non-Diabetic','Diabetic'
+plt.figure(figsize = (10,7))
 plt.pie(diabetes['Outcome'].value_counts(), labels = labels, colors = colors, autopct = '%0.01f%%')
 plt.legend()
 plt.show()
 
 #Gráfico de barras para a GlycemiaValues
-sns.set(style="darkgrid")
-sns.countplot(x="GlycemiaValues", data=diabetesdf, order=['Hypoglycemia','Normal','Pre-diabetes'], palette='pastel', saturation = 2)
+sns.set(style = "darkgrid")
+sns.countplot(x = "GlycemiaValues", data = diabetesdf, order = ['Hypoglycemia','Normal','Pre-diabetes'], palette = 'pastel', saturation = 2)
 plt.title('Gráfico de barras para a variável categoria GlycemiaValues')
 plt.show()
 
 #Gráfico circular para a variavel criada GlycemiaValues
 colors = sns.color_palette('pastel')
 labels = 'Normal', 'Pre-diabetes', 'Hypoglycemia'
-plt.figure(figsize=(10,7))
+plt.figure(figsize = (10,7))
 plt.pie(diabetes['GlycemiaValues'].value_counts(), labels = labels, colors = colors, autopct = '%0.01f%%')
 plt.legend()
 plt.show()
@@ -104,10 +104,10 @@ colors = sns.color_palette('pastel')
 
 def varnum(variavel):
     print(variavel)
-    sns.histplot(data=diabetesdf, x=variavel,kde=True)
+    sns.histplot(data = diabetesdf, x = variavel, kde = True)
     plt.title(f"Histogram of {variavel}")
     plt.show()
-    sns.boxplot(data=diabetesdf, x=variavel)
+    sns.boxplot(data = diabetesdf, x = variavel)
     plt.title(f"Boxplot of {variavel}")
     plt.show()
 
@@ -115,7 +115,7 @@ varnum("Glucose")
 
 #Histograma de uma variavel numérica em função de uma das 2 variaveis (categoria) Outcome ou GlycemiaValues
 def varhue(variavel, categoria):
-    sns.histplot(data=diabetesdf, x=variavel, hue= categoria, legend=True)
+    sns.histplot(data = diabetesdf, x = variavel, hue = categoria, legend = True)
     plt.title(f"Histogram of {variavel} in order to {categoria}")
     plt.show()
 
@@ -133,7 +133,7 @@ def outlier_removal(self,data):
     for column in data.columns:
         if data[column].dtype!= 'int64':
             UL,LL = outlier_limits(data[column])
-            data[column] = np.where(data[column]> UL | data[column]< LL, np.nan,data[column])
+            data[column] = np.where(data[column] > UL | data[column] < LL, np.nan,data[column])
     return data
 
 #é suposto fazermos um gráfico novamente só para mostrar que conseguimos remover os outliers?
