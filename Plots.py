@@ -1,23 +1,14 @@
 #Importação de pacotes
-import missingno as msno
 import pandas as pd
 from pandas_profiling import ProfileReport
 import numpy as np
-import statsmodels
-import seaborn as sns
 import matplotlib.pyplot as plt
-import plotly.express as px
+import seaborn as sns
 
 #Leitura de base de dados
 diabetes = pd.read_csv("diabetes.csv")
-variaveis = diabetes.columns[:8]
+variaveisnum = diabetes.columns[:8]
 diabetesdf=pd.DataFrame(data=diabetes, columns=diabetes.columns)
-
-'''
-#Checking missing values and data types
-msno.matrix(diabetesdf)
-plt.show()
-'''
 
 #Criação da nova variável categoria tendo em conta os valores de glicemia
 x=[]
@@ -36,6 +27,14 @@ for i in diabetes["Glucose"]:
 #Adição da nova variável à base de dados
 diabetes.insert(loc=2, column="GlycemiaValues", value=x)
 print(diabetes)
+
+#separam o outcome 0 de 1
+df_d0 = diabetes[diabetes['Outcome'] == 0]
+df_d1 = diabetes[diabetes['Outcome'] == 1]
+
+#and random sample the same amount of instances from the higher represented '0' class to match the available '1' class instances
+df_d0_samp = df_d0.sample(268,replace = False)
+df_bal = pd.concat([df_d1, df_d0_samp])
 
 #Gráfico de barras com a contagem de outcomes
 plt.figure()
@@ -58,6 +57,19 @@ plt.legend()
 plt.show()
 ######Nota! Gráfico redundante porque já temos um barplot a dizer isto --> escolher qual usar
 
+#histograma com função de densidade das variáveis em função do outcome
+cores = {0: 'blue', 1: 'green'}
+cores2 = {'Hypoglycemia': 'blue', 'Normal': 'green', 'Pre-diabetes': 'yellow'}
+counter = 0
+for i in variaveisnum:
+    counter += 1
+    print(counter, ':', i)
+    sns.set(style="darkgrid")
+    sns.displot(data = df_bal, kde=True, x = diabetes[str(i)], hue='Outcome', palette=cores)
+    plt.title(f'"{i}" em função do Outcome')
+plt.plot()
+plt.show()
+'''
 #Histogramas + boxplots (lado a lado) para uma variável numerica em função do outcome
 fig = px.histogram(diabetesdf, x = 'Glucose',
                    color = 'Outcome',
@@ -78,6 +90,7 @@ fig.update_layout(
 fig.show()
 
 #Problema: abre uma página no navegador e temos de ver se é dessa maneira que queremos visualizar o gráfico
+'''
 
 # Pairplot
 cores = {0: 'blue', 1: 'green'}
@@ -86,7 +99,6 @@ sns.set(font_scale=0.7, style="darkgrid")
 sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde", palette = cores, plot_kws = {"s": 8})
 plt.title('Pairplot')
 plt.show()
-
 #Matriz de correlações
 corr = diabetesdf.corr().round(2)
 plt.figure(figsize=(14, 10))
@@ -96,3 +108,23 @@ mask[np.triu_indices_from(mask)] = True
 sns.heatmap(corr, annot = True, cmap = 'BuPu', mask = mask, cbar = True)
 plt.title('Correlation Matrix')
 plt.show()
+
+#função que executa gráficos de dispersão entre as variaveis NUMERICAS escolhidas pelo utilizador
+def varscatter(variavel_1,variavel_2):
+    print(f"Variável no eixo dos xx: {variavel_1} \nVariável no eixo dos yy: {variavel_2}")
+    sns.scatterplot(data=diabetesdf, x=variavel_1, y=variavel_2)
+    plt.title(f"Scatterplot of {variavel_1} by {variavel_2}")
+    plt.show()
+
+varscatter("Glucose","BMI")
+
+#caso o utilizador opte por fazer em função ou do outcome ou da variavel "GlycemiaValues" incorporar esta função
+def varscatter2(variavel1, variavel2, varcategorical):
+    sns.scatterplot(data=diabetesdf, x=variavel1, y=variavel2, hue=varcategorical)
+    plt.title(f"Scatterplot of {variavel1} by {variavel2} in order to {varcategorical}")
+    plt.show()
+
+varscatter2("Glucose","BMI","Outcome")
+varscatter2("Glucose","BMI","GlycemiaValues")
+
+##Nestas funções, as variáveis deviam ser pedidas pelo utlizador, ou seja input, e depois eram feitas verificações caso o nome da variável não fosse correto
