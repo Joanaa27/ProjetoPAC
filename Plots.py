@@ -37,14 +37,6 @@ for i in diabetes["Glucose"]:
 diabetes.insert(loc=2, column="GlycemiaValues", value=x)
 print(diabetes)
 
-#separam o outcome 0 de 1
-df_d0 = diabetes[diabetes['Outcome'] == 0]
-df_d1 = diabetes[diabetes['Outcome'] == 1]
-
-#and random sample the same amount of instances from the higher represented '0' class to match the available '1' class instances
-df_d0_samp = df_d0.sample(268,replace = False)
-df_bal = pd.concat([df_d1, df_d0_samp])
-'''
 #Gráfico de barras com a contagem de outcomes
 plt.figure()
 sns.countplot(x = diabetesdf["Outcome"], data = diabetesdf, saturation = 1)
@@ -66,18 +58,6 @@ plt.legend()
 plt.show()
 ######Nota! Gráfico redundante porque já temos um barplot a dizer isto --> escolher qual usar
 
-#histograma com função de densidade das variáveis em função do outcome
-cores = {0: 'blue', 1: 'green'}
-counter = 0
-for i in variaveis:
-    counter += 1
-    print(counter, ':', i)
-    sns.set(style="darkgrid")
-    sns.displot(data = df_bal, kde=True, x = diabetes[str(i)], hue='Outcome', palette=cores)
-    plt.title(f'"{i}" em função do Outcome')
-plt.plot()
-plt.show()
-
 #Histogramas + boxplots (lado a lado) para uma variável numerica em função do outcome
 fig = px.histogram(diabetesdf, x = 'Glucose',
                    color = 'Outcome',
@@ -96,12 +76,8 @@ fig.update_layout(
         'yanchor': 'top'},
 )
 fig.show()
-#Problema: abre uma página no navegador e temos de ver se é dessa maneira que queremos visualizar o gráfico
 
-#Scatterplots entre as variáveis
-plt.plot(diabetesdf, x='Glucose', y='BMI', color='blue')
-plt.title('Gráfico de dispersão de duas varíaveis')
-plt.show()
+#Problema: abre uma página no navegador e temos de ver se é dessa maneira que queremos visualizar o gráfico
 
 # Pairplot
 cores = {0: 'blue', 1: 'green'}
@@ -110,50 +86,13 @@ sns.set(font_scale=0.7, style="darkgrid")
 sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde", palette = cores, plot_kws = {"s": 8})
 plt.title('Pairplot')
 plt.show()
-'''
-"""
+
 #Matriz de correlações
-corr=diabetesdf.corr().round(2)
-
+corr = diabetesdf.corr().round(2)
 plt.figure(figsize=(14, 10))
-#sns.color_palette('pastel')
-sns.set_palette('pastel')
-sns.set(style="darkgrid")
+sns.set(font_scale=1.15)
 mask = np.zeros_like(corr)
 mask[np.triu_indices_from(mask)] = True
-sns.heatmap(corr,annot=True,cmap='gist_yarg_r',mask=mask,cbar=True)
-plt.title('Correlation Plot')
+sns.heatmap(corr, annot = True, cmap = 'BuPu', mask = mask, cbar = True)
+plt.title('Correlation Matrix')
 plt.show()
-
-plt.figure(figsize=(14, 10))
-sns.set(font_scale=1.15, palette='pastel', style='darkgrid')
-mask = np.zeros_like(corr)
-mask[np.triu_indices_from(mask)] = True
-sns.heatmap(corr,annot=True,cmap='gist_yarg_r',mask=mask,cbar=True)
-plt.title('Correlation Plot')
-plt.show()
-"""
-
-#função que executa gráficos de dispersão entre as variaveis NUMERICAS escolhidas pelo utilizador
-def varscatter(variavel_1,variavel_2):
-    print(f"Variável no eixo dos xx: {variavel_1} \nVariável no eixo dos yy: {variavel_2}")
-    sns.scatterplot(data=diabetesdf, x=variavel_1, y=variavel_2)
-    plt.title(f"Scatterplot of {variavel_1} by {variavel_2}")
-    plt.show()
-
-varscatter("Glucose","BMI")
-
-#caso o utilizador opte por fazer em função ou do outcome ou da variavel "GlycemiaValues" incorporar esta função
-def varscatter2(variavel1, variavel2, varcategorical):
-    sns.scatterplot(data=diabetesdf, x=variavel1, y=variavel2, hue=varcategorical)
-    plt.title(f"Scatterplot of {variavel1} by {variavel2} in order to {varcategorical}")
-    plt.show()
-
-varscatter2("Glucose","BMI","Outcome")
-varscatter2("Glucose","BMI","GlycemiaValues")
-
-#matriz de graficos de dispersão que inclui todas as variaveis - teno de melhorar
-sns.set_theme(style="ticks")
-sns.pairplot(diabetesdf, hue="Outcome")
-plt.show()
-
