@@ -16,9 +16,9 @@ for i in diabetes["Glucose"]:
     valor = ""
     if i<=70:
         valor= "Hypoglycemia"
-    elif i>70 and i<=140:
+    elif i<=140:
         valor= "Normal"
-    elif i>140 and i<=199:
+    elif i<=199:
         valor= "Pre-diabetes"
     else:
         valor= "Diabetes"
@@ -56,7 +56,7 @@ def stripvar(dataframe, drop_values, has_outcome=False):
     plt.title("Stripplot of numeric variables by Outcome")  if has_outcome else plt.title("Stripplot of numeric variables")
     plt.show()
 
-#stripvar(diabetesdf,["GlycemiaValues","Insulin"],True)
+stripvar(diabetesdf,["GlycemiaValues","Insulin"],True)
 
 #Gráfico de barras com a contagem de outcomes ou de GlycemiaValues
 def outc_values(dataframe, vcategorical):
@@ -119,7 +119,7 @@ def histvout(dataframe, vcategorical):
     plt.plot()
     plt.show()
 
-#histvout(diabetesdf,"GlycemiaValues")
+histvout(diabetesdf,"GlycemiaValues")
 
 # Pairplot
 def pairplt(dataframe,vcategorical=None):
