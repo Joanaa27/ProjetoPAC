@@ -76,9 +76,9 @@ def outc_values(dataframe, vcategorical):
 def circular(dataframe, vcategorical):
     labels=[]
     if vcategorical=="Outcome":
-        labels= ['Not Diabetic','Diabetic'] 
+        labels= {'Not Diabetic', 'Diabetic'}
     else:
-        labels=['Hypoglycemia','Normal','Pre-diabetes']
+        labels={'Normal':'Normal','Pre-diabetes':'Pre-diabetes','Hypoglycemia':'Hypoglycemia'}
 
     plt.figure(figsize=(10,7))
     plt.pie(dataframe[vcategorical].value_counts(),labels=labels,autopct='%0.02f%%')
@@ -86,6 +86,7 @@ def circular(dataframe, vcategorical):
     plt.show()
 
 #print((diabetesdf["GlycemiaValues"]=="Normal").value_counts()) #560
+#circular(diabetesdf,"Outcome")
 
 #histograma com função de densidade das variáveis em função do outcome
 def histvout(dataframe, vcategorical): 
@@ -152,27 +153,16 @@ def matrcorr(dataframe):
 #matrcorr(diabetesdf)
 
 #função que executa gráficos de dispersão entre as variaveis NUMERICAS escolhidas pelo utilizador
-def varscatter(variavel_1,variavel_2):
+def scatterplt(dataframe,variavel_1,variavel_2, vcategorical=None):
     print(f"Variável no eixo dos xx: {variavel_1} \nVariável no eixo dos yy: {variavel_2}")
-    sns.scatterplot(data=diabetesdf, x=variavel_1, y=variavel_2)
-    plt.title(f"Scatterplot of {variavel_1} by {variavel_2}")
+    sns.scatterplot(data=dataframe, x=variavel_1, y=variavel_2, hue=vcategorical)
+    plt.title(f"Scatterplot of {variavel_1} by {variavel_2} in order to {vcategorical}") if vcategorical is not None else plt.title(f"Scatterplot of {variavel_1} by {variavel_2}") 
     plt.show()
 
-#varscatter("Glucose","BMI")
+#scatterplt(diabetesdf,"Glucose","BMI")
+#scatterplt(diabetesdf,"Glucose","BMI","GlycemiaValues")
 
-#caso o utilizador opte por fazer em função ou do outcome ou da variavel "GlycemiaValues" incorporar esta função
-def varscatter2(variavel1, variavel2, varcategorical):
-    sns.scatterplot(data=diabetesdf, x=variavel1, y=variavel2, hue=varcategorical)
-    plt.title(f"Scatterplot of {variavel1} by {variavel2} in order to {varcategorical}")
-    plt.show()
-
-#varscatter2("Glucose","BMI","Outcome")
-#varscatter2("Glucose","BMI","GlycemiaValues")
-
-#Nestas funções, as variáveis deviam ser pedidas pelo utlizador, ou seja input, 
-#e depois eram feitas verificações caso o nome da variável não fosse correto
-
-
+#######################################################################################
 #Histogramas + boxplots (lado a lado) para uma variável numerica em função do outcome
 def histpx():
     fig = px.histogram(diabetesdf, x = 'Glucose',
