@@ -40,8 +40,6 @@ for i in diabetes["Glucose"]:
 diabetes.insert(loc=2, column="GlycemiaValues", value=x)
 #print(diabetes)
 
-hist_vcat(diabetesdf,"GlycemiaValues")
-
 #função para todos os fins de opção perguntar se quer continuar ou terminar a analise
 def terminar():
     escolha=input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
@@ -99,15 +97,17 @@ def opcoes_menu():
         print("            8: DiabetesPedigreeFunction       ")
         print("            9: Age                            ")
         print("            10: Outcome                       ")
-        variavel= input(f"Escolha a variável que deseja analisar:")
+        variaveis= input(f"Escolha uma ou mais variáveis que deseja analisar utilizando os números do menu acima:")
 
+        """
         outc_values(diabetesdf, vcategorical)
         circular(diabetesdf, vcategorical)
-        hist_vcat(diabetesdf, vcategorical)
-        var_num(diabetesdf, variavel)
-        swarmplotvar(diabetesdf,variavel,vcategorical=None)
 
-    
+        hist_vcat(diabetesdf, vcategorical)
+        var_num(diabetesdf, variaveis)
+        swarmplotvar(diabetesdf,variaveis,vcategorical=None)
+        """
+
     #elif opcao == 2:
     #    função3
     

@@ -24,25 +24,25 @@ def tabelas(dataframe, id):
 #tabelas(diabetesdf,2)
 
 #análise para cada variável numérica, breve descrição estatística (média, quartis, etc), histograma e boxplot para observar a distribuição 
-def var_num(dataframe, variavel):
-    print(variavel)
+def var_num(dataframe, variaveis):
+    print(variaveis)
     fig, ax = plt.subplots()
     ax.axis('off')
     ax.axis('tight')
-    df_var=dataframe[variavel].describe()
+    df_var=dataframe[variaveis].describe()
     colnames= df_var.axes[0].tolist()
     tabela= ax.table(cellText=[df_var.values.round(2)],colLabels=colnames, loc='center')
     tabela.auto_set_font_size(False)
     tabela.set_fontsize(8)
-    print(f"Tabela das medidas estatísticas de {variavel}")
+    print(f"Tabela das medidas estatísticas de {variaveis}")
     plt.show()
     
-    sns.histplot(data=dataframe, x=variavel,kde=True)
-    plt.title(f"Histogram of {variavel}")
+    sns.histplot(data=dataframe, x=variaveis,kde=True)
+    plt.title(f"Histogram of {variaveis}")
     plt.show()
 
-    sns.boxplot(data=dataframe, x=variavel)
-    plt.title(f"Boxplot of {variavel}")
+    sns.boxplot(data=dataframe, x=variaveis)
+    plt.title(f"Boxplot of {variaveis}")
     plt.show()
 
 #var_num(diabetesdf,"Insulin")
@@ -105,9 +105,9 @@ def regressao (dataframe,variavel_1,variavel_2,vcategorical=None):
 #regressao(diabetesdf,"Glucose","Age","Outcome")
 #regressao(diabetesdf,"Glucose","Age")
 
-def swarmplotvar(dataframe,variavel,vcategorical=None):
-    sns.catplot(x = vcategorical, y = variavel, hue = vcategorical, kind = "swarm", data = dataframe) 
-    plt.title(f"Swarmplot of {variavel} by {vcategorical}")
+def swarmplotvar(dataframe,variaveis,vcategorical=None):
+    sns.catplot(x = vcategorical, y = variaveis, hue = vcategorical, kind = "swarm", data = dataframe) 
+    plt.title(f"Swarmplot of {variaveis} by {vcategorical}")
     plt.show()
 
 #swarmplotvar(diabetesdf,"BMI","Outcome")
@@ -175,7 +175,7 @@ def circular(dataframe, vcategorical):
 #circular(diabetesdf,"Outcome")
 
 #histograma com função de densidade das variáveis em função do outcome ou glycemiavalues
-def hist_vcat(dataframe, vcategorical): 
+def hist_vcat(dataframe, vcategorical, variaveis): 
 
     if vcategorical=="Outcome":
         #separam o outcome 0 de 1
@@ -194,8 +194,6 @@ def hist_vcat(dataframe, vcategorical):
         df_bal = pd.concat([df_d0,df_d2, df_d1_samp])
         cores = {'Hypoglycemia': 'yellow', 'Normal': 'green', 'Pre-diabetes': 'blue'}
 
-
-    variaveis= dataframe.columns.drop(["GlycemiaValues","Outcome"]) #usamos diabetes, porque nao queremos a variavel que criamos
     counter = 0
     for val in variaveis:
         counter += 1
