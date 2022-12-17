@@ -1,32 +1,118 @@
-#Importação de pacotes
 import pandas as pd
 from pandas_profiling import ProfileReport
 import numpy as np
-import matplotlib.pyplot as plt
 import seaborn as sns
-import plotly_express as px
+import matplotlib.pyplot as plt
 
-#Leitura de base de dados
-diabetes = pd.read_csv("diabetes.csv")
-diabetesdf=pd.DataFrame(diabetes)
-
-#Criação da nova variável categoria tendo em conta os valores de glicemia
-x=[]
-for i in diabetes["Glucose"]:
-    valor = ""
-    if i<=70:
-        valor= "Hypoglycemia"
-    elif i<=140:
-        valor= "Normal"
-    elif i<=199:
-        valor= "Pre-diabetes"
+#tabela da dataframe - 1 ou tabela com propriedades estatísticas das variáveis numéricas -2
+def tabelas(dataframe, id):
+    fig, ax = plt.subplots()
+    ax.axis('off')
+    ax.axis('tight')
+    if id==1:
+        tabela= ax.table(cellText=dataframe.values[0:25], colWidths = [0.1]*len(dataframe.columns),  colLabels=dataframe.columns, loc='center')
     else:
-        valor= "Diabetes"
-    x.append(valor)
+        desc=dataframe.describe()
+        print(desc.values)
+        rownames= desc.axes[0].tolist()
+        tabela= ax.table(cellText=desc.values, colWidths = [0.1]*len(dataframe.columns),  colLabels=dataframe.columns, rowLabels= rownames, loc='center')
+    tabela.auto_set_font_size(False)
+    tabela.set_fontsize(8)
+    plt.show()
 
-#Adição da nova variável à base de dados
-diabetes.insert(loc=2, column="GlycemiaValues", value=x)
-#print(diabetes)
+#tabelas(diabetesdf, 1)
+#tabelas(diabetesdf,2)
+
+#análise para cada variável numérica, breve descrição estatística (média, quartis, etc), histograma e boxplot para observar a distribuição 
+def var_num(dataframe, variavel):
+    print(variavel)
+    fig, ax = plt.subplots()
+    ax.axis('off')
+    ax.axis('tight')
+    df_var=dataframe[variavel].describe()
+    colnames= df_var.axes[0].tolist()
+    tabela= ax.table(cellText=[df_var.values.round(2)],colLabels=colnames, loc='center')
+    tabela.auto_set_font_size(False)
+    tabela.set_fontsize(8)
+    print(f"Tabela das medidas estatísticas de {variavel}")
+    plt.show()
+    
+    sns.histplot(data=dataframe, x=variavel,kde=True)
+    plt.title(f"Histogram of {variavel}")
+    plt.show()
+
+    sns.boxplot(data=dataframe, x=variavel)
+    plt.title(f"Boxplot of {variavel}")
+    plt.show()
+
+#var_num(diabetesdf,"Insulin")
+
+"""
+#função para efetuar boxplots de uma variavel numérica em função de uma das 2 variaveis(categoria) Outcome ou GlycemiaValues
+def varboxplot (variavel,categoria):
+    sns.boxplot(data=diabetesdf, x=variavel, y=categoria,hue=categoria, dodge=False)
+    plt.title(f"Boxplot of {variavel} by {categoria}")
+    plt.show()
+
+varboxplot("Glucose","Outcome")
+"""
+
+#histograma e função densididade de TODAS as variaveis em função do "Outcome" e "GlycemiaValues"
+def hist_total(dataframe,has_outcome=False):
+    variaveis=dataframe.columns
+    counter = 0
+    for i in variaveis:
+        counter += 1
+        print(counter, ':', i)
+        plt.subplot(3, 3, counter)
+        sns.histplot(data = dataframe, x = dataframe[str(i)], hue = "Outcome", multiple  = 'dodge', kde=True) if has_outcome else sns.histplot(data = dataframe, x = dataframe[str(i)], multiple  = 'dodge', kde=True)
+    plt.suptitle("Histogram of all variables by Outcome", fontsize=16) if has_outcome else plt.suptitle("Histogram of all variables", fontsize=16)
+    plt.plot()
+    plt.show()
+
+#hist_total(diabetesdf)
+#hist_total(diabetesdf,True)
+
+def regressao (dataframe,variavel_1,variavel_2,vcategorical=None):
+    if vcategorical=="Outcome":
+        #separam o outcome 0 de 1
+        df_d0 = dataframe[dataframe['Outcome'] == 0]
+        df_d1 = dataframe[dataframe['Outcome'] == 1]
+        #executamos uma amostra aleatoria com o mesmo numero de observações da categoria mais representada, 
+        #neste caso 0 para dar "match" com as observações da categoria 1
+        df_d0_samp = df_d0.sample(268,replace = False)
+        df_bal = pd.concat([df_d1, df_d0_samp])
+        sns.regplot(x=variavel_1, y=variavel_2, data=df_bal[df_bal['Outcome'] == 0], color='blue')
+        sns.regplot(x=variavel_1, y=variavel_2, data=df_bal[df_bal['Outcome'] == 1], color='green')
+
+    elif vcategorical=="GlycemiaValues":
+        df_d0 = dataframe[dataframe['GlycemiaValues'] == "Hypoglycemia"]
+        df_d1 = dataframe[dataframe['GlycemiaValues'] == "Normal"]
+        df_d2 = dataframe[dataframe['GlycemiaValues'] == "Pre-diabetes"]
+        df_d1_samp = df_d1.sample(560,replace = False)
+        df_bal = pd.concat([df_d0,df_d2, df_d1_samp])
+        sns.regplot(x=variavel_1, y=variavel_2, data=df_bal[df_bal['GlycemiaValues'] == "Hypoglycemia"], color='yellow')
+        sns.regplot(x=variavel_1, y=variavel_2, data=df_bal[df_bal['GlycemiaValues'] == "Normal"], color='green')
+        sns.regplot(x=variavel_1, y=variavel_2, data=df_bal[df_bal['GlycemiaValues'] == "Pre-diabetes"], color='blue')
+
+    else:
+        sns.regplot(x=variavel_1, y=variavel_2, data=dataframe, color='blue')
+
+    plt.title(f"{variavel_1} vs {variavel_2} scatterplot by {vcategorical}")
+    plt.show()
+
+#regressao(diabetesdf,"Glucose","Age","GlycemiaValues")
+#regressao(diabetesdf,"Glucose","Age","Outcome")
+#regressao(diabetesdf,"Glucose","Age")
+
+def swarmplotvar(dataframe,variavel,vcategorical=None):
+    sns.catplot(x = vcategorical, y = variavel, hue = vcategorical, kind = "swarm", data = dataframe) 
+    plt.title(f"Swarmplot of {variavel} by {vcategorical}")
+    plt.show()
+
+#swarmplotvar(diabetesdf,"BMI","Outcome")
+#swarmplotvar(diabetesdf,"BMI","GlycemiaValues")
+#swarmplotvar(diabetesdf,"BMI")
 
 #boxplot de todas as variáveis em função da variavel "Outcome"
 #eliminar a coluna GlycemiaValues porque não queremos e não faz sentido aparecer na dataframe
@@ -56,7 +142,7 @@ def stripvar(dataframe, drop_values, has_outcome=False):
     plt.title("Stripplot of numeric variables by Outcome")  if has_outcome else plt.title("Stripplot of numeric variables")
     plt.show()
 
-stripvar(diabetesdf,["GlycemiaValues","Insulin"],True)
+#stripvar(diabetesdf,["GlycemiaValues","Insulin"],True)
 
 #Gráfico de barras com a contagem de outcomes ou de GlycemiaValues
 def outc_values(dataframe, vcategorical):
@@ -109,12 +195,12 @@ def hist_vcat(dataframe, vcategorical):
         cores = {'Hypoglycemia': 'yellow', 'Normal': 'green', 'Pre-diabetes': 'blue'}
 
 
-    variaveis= diabetes.columns #usamos diabetes, porque nao queremos a variavel que criamos
+    variaveis= dataframe.columns.drop(["GlycemiaValues","Outcome"]) #usamos diabetes, porque nao queremos a variavel que criamos
     counter = 0
     for val in variaveis:
         counter += 1
         print(counter, ':', val)
-        sns.displot(data = df_bal, kde=True, x = diabetes[str(val)], hue=vcategorical, palette=cores)
+        sns.displot(data = df_bal, kde=True, x = dataframe[str(val)], hue=vcategorical, palette=cores)
         plt.title(f'"{val}" by {vcategorical}')
     plt.plot()
     plt.show()
@@ -162,10 +248,12 @@ def scatterplt(dataframe,variavel_1,variavel_2, vcategorical=None):
 #scatterplt(diabetesdf,"Glucose","BMI")
 #scatterplt(diabetesdf,"Glucose","BMI","GlycemiaValues")
 
+
+
 #######################################################################################
 #Histogramas + boxplots (lado a lado) para uma variável numerica em função do outcome
-def histpx():
-    fig = px.histogram(diabetesdf, x = 'Glucose',
+def histpx(dataframe):
+    fig = px.histogram(dataframe, x = 'Glucose',
                     color = 'Outcome',
                     marginal = 'box',
                     barmode= 'overlay',

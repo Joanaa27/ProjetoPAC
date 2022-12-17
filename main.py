@@ -1,10 +1,46 @@
 import pandas as pd
 from pandas_profiling import ProfileReport
 import numpy as np
-import statsmodels
 import seaborn as sns
 import matplotlib.pyplot as plt
-import plotly_express as px
+
+#importação de todas as funções dos ficheiros Funçoes e Plots, para que possam ser chamadas neste ficheiro main
+from Plots import *
+
+#Leitura de base de dados
+diabetes = pd.read_csv("diabetes.csv")
+diabetesdf=pd.DataFrame(diabetes)
+variaveis = diabetes.columns
+
+"""
+adicionar nova coluna na data frame
+glucose medida em período pós pradial , 2h após refeição
+https://www.mayoclinic.org/tests-procedures/glucose-tolerance-test/about/pac-20394296
+até 70mg/dL - hipoglicemia
+70 a 140 mg/dL - normal
+140 a 200 mg/dL - pré-diabetes
+mais de 200 mg/dL - diabetes
+"""
+
+#Criação da nova variável categoria tendo em conta os valores de glicemia
+x=[]
+for i in diabetes["Glucose"]:
+    valor = ""
+    if i<=70:
+        valor= "Hypoglycemia"
+    elif i<=140:
+        valor= "Normal"
+    elif i<=199:
+        valor= "Pre-diabetes"
+    else:
+        valor= "Diabetes"
+    x.append(valor)
+
+#Adição da nova variável à base de dados
+diabetes.insert(loc=2, column="GlycemiaValues", value=x)
+#print(diabetes)
+
+hist_vcat(diabetesdf,"GlycemiaValues")
 
 #função para todos os fins de opção perguntar se quer continuar ou terminar a analise
 def terminar():
@@ -21,17 +57,15 @@ def terminar():
     else:
         exit()
 
-#importação de todas as funções dos ficheiros Funçoes e Plots, para que possam ser chamadas neste ficheiro main
-from Plots import *
-from Funçoes import *
 
 def menu():
-    print("        [Menu] Escolhe uma das seguintes opções:")
-    print("|                  0 - Visualização da DataFrame Diabetes                       |")
-    print("|                  1 - Variables                      |")
-    print("|                  2 - Interaction and Correlations                   |")
-    print("|                  3 - Report                         |")
-    print("|                  4 - Sair                         |")
+    print("  [Menu] Escolhe uma das seguintes opções:")
+    print("|     0 - Visualização da DataFrame Diabetes   |")
+    print("|     1 - Variables - individual                           |")
+    print("|     2 - Variables - all                           |")
+    print("|     3 - Interaction and Correlations         |")
+    print("|     4 - Report                               |")
+    print("|     5 - Sair                                 |")
     opcoes_menu()
 
 #opção 0 - visualização da data frame e de algumas informações relativas à mesma
@@ -44,22 +78,35 @@ def opcoes_menu():
     if opcao == 0:
         print(f"Base de Dados Diabetes:\n {diabetesdf}")
         print(f"Informações gerais sobre a base de dados:\n {diabetesdf.info()}")
-        opcaoa= int(input("Pretende ainda visualizar:\n 0- tabela com as primeiras 20 observações \n 1- tabela com cálculos estatísticos das variáveis \n 2-Voltar ao Menu Principal \n Opção:"))
+        opcaoa= int(input("Pretende ainda visualizar:\n 0- Tabela com as primeiras 20 observações \n 1- Tabela com medidas estatísticas das variáveis \n 2- Voltar ao Menu Principal \n Opção:"))
         if opcaoa==0:
             print(f"Tabela com as primeiras 20 observações da base de dados\n {tabelas(diabetesdf,1)}")
             terminar()
         elif opcaoa==1:
-            print(f"Tabela com as primeiras 20 observações da base de dados\n {tabelas(diabetesdf,2)}")
+            print(f"Tabela com as medidas estatísticas das variáveis \n {tabelas(diabetesdf,2)}")
             terminar()
         else:
             menu()
     
     elif opcao == 1:
-        variavel= int(input("Escolha uma das seguintes opções:\n 0-Análise Geral das Variáveis Numéricas \n 1- "))
-        if variavel==0:
-            print(diabetesdf.describe())
-        elif variavel==1:
-            print("xau")
+        print("            1: Pregnancies                    ")
+        print("            2: Glucose                        ")
+        print("            3: GlycemiaValues                 ")
+        print("            4: BloodPressure                  ")
+        print("            5: SkinThickness                  ")
+        print("            6: Insulin                        ")
+        print("            7: BMI                            ")
+        print("            8: DiabetesPedigreeFunction       ")
+        print("            9: Age                            ")
+        print("            10: Outcome                       ")
+        variavel= input(f"Escolha a variável que deseja analisar:")
+
+        outc_values(diabetesdf, vcategorical)
+        circular(diabetesdf, vcategorical)
+        hist_vcat(diabetesdf, vcategorical)
+        var_num(diabetesdf, variavel)
+        swarmplotvar(diabetesdf,variavel,vcategorical=None)
+
     
     #elif opcao == 2:
     #    função3
