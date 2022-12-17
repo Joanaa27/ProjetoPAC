@@ -4,6 +4,7 @@ import numpy as np
 import statsmodels
 import seaborn as sns
 import matplotlib.pyplot as plt
+import plotly_express as px
 
 diabetes = pd.read_csv("diabetes.csv")
 
@@ -24,7 +25,7 @@ for i in diabetesdf["Glucose"]:
     x.append(valor)
 
 diabetesdf.insert(loc=2, column="GlycemiaValues", value=x)
-print(diabetesdf.loc[2])
+#print(diabetesdf.loc[2])
 
 #análise para cada variável numérica, breve descrição estatística (média, quartis, etc) e histograma para observar a distribuição
 
@@ -45,7 +46,6 @@ def varhue(variavel, categoria):
     sns.histplot(data=diabetesdf, x=variavel, hue= categoria, legend=True)
     plt.title(f"Histogram of {variavel} in order to {categoria}")
     plt.show()
-
 
 #varhue("Glucose", "Outcome")
 #varhue("Glucose","GlycemiaValues")
@@ -108,15 +108,16 @@ def variaveiscat(variavel , categoria):
 #variaveiscat("Insulin","GlycemiaValues")
 
 #histograma e função densididade de TODAS as variaveis em função do "Outcome" e "GlycemiaValues"
-counter = 0
-for i in variaveis:
-    counter += 1
-    print(counter, ':', i)
-    plt.subplot(3, 3, counter)
-    sns.histplot(data = diabetesdf, x = diabetesdf[str(i)], hue = "Outcome", multiple  = 'dodge', kde=True)
-plt.suptitle("Histogram of all variables by Outcome", fontsize=16)
-plt.plot()
-plt.show()
+def hist_total():
+    counter = 0
+    for i in variaveis:
+        counter += 1
+        print(counter, ':', i)
+        plt.subplot(3, 3, counter)
+        sns.histplot(data = diabetesdf, x = diabetesdf[str(i)], hue = "Outcome", multiple  = 'dodge', kde=True)
+    plt.suptitle("Histogram of all variables by Outcome", fontsize=16)
+    plt.plot()
+    plt.show()
 
 
 df_d0 = diabetesdf[diabetesdf['Outcome'] == 0]
@@ -132,7 +133,7 @@ def regressao (variavel1,variavel2):
     plt.title(f"{variavel1} vs {variavel2} scatterplot")
     plt.show()
 
-regressao("Glucose","Age")
+#regressao("Glucose","Age")
 
 def catplotvar(variavel):
     sns.catplot(x = "Outcome", y = variavel, hue = "Outcome", kind = "swarm", data = diabetesdf)

@@ -4,6 +4,7 @@ from pandas_profiling import ProfileReport
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly_express as px
 
 #Leitura de base de dados
 diabetes = pd.read_csv("diabetes.csv")
@@ -25,12 +26,12 @@ for i in diabetes["Glucose"]:
 
 #Adição da nova variável à base de dados
 diabetes.insert(loc=2, column="GlycemiaValues", value=x)
-print(diabetes)
+#print(diabetes)
 
 #boxplot de todas as variáveis em função da variavel "Outcome"
 #eliminar a coluna GlycemiaValues porque não queremos e não faz sentido aparecer na dataframe
-diabetes_melted = pd.melt(diabetesbp, id_vars = "Outcome", var_name = "variables", value_name = "value")
 diabetesbp= diabetesdf.drop("GlycemiaValues", axis=1)
+diabetes_melted = pd.melt(diabetesbp, id_vars = "Outcome", var_name = "variables", value_name = "value")
 
 def boxplot_all():
     plt.figure(figsize = (15, 15))
@@ -39,9 +40,11 @@ def boxplot_all():
     plt.show()
 
 #swarm plot de todas as variavem em função da variável "Outcome"
-plt.figure(figsize = (15, 15))
-sns.swarmplot(x = "variables", y = "value", hue = "Outcome", data = diabetes_melted)
-plt.show()
+def swarvar():
+    plt.figure(figsize = (15, 15))
+    sns.swarmplot(x = "variables", y = "value", hue = "Outcome", data = diabetes_melted)
+    plt.title("Swarmplot of all variavles by Outcome")
+    plt.show()
 
 #Gráfico de barras com a contagem de outcomes ou de GlycemiaValues
 def outc_values(vcategorical):
@@ -55,7 +58,7 @@ def outc_values(vcategorical):
     plt.title(f"Distribution of {vcategorical}")
     plt.show()
 
-outc_values("GlycemiaValues")
+#outc_values("GlycemiaValues")
 
 #grafico circular do outcome 0 e 1  e da variavel criada "GlycemiaValues"
 def circular():
@@ -65,7 +68,6 @@ def circular():
     plt.legend()
     plt.show()
 ######Nota! Gráfico redundante porque já temos um barplot a dizer isto --> escolher qual usar
-
 
 #separam o outcome 0 de 1
 df_d0 = diabetes[diabetes['Outcome'] == 0]
@@ -90,23 +92,24 @@ def histvout():
     plt.show()
 
 #Histogramas + boxplots (lado a lado) para uma variável numerica em função do outcome
-fig = px.histogram(diabetesdf, x = 'Glucose',
-                   color = 'Outcome',
-                   marginal = 'box',
-                   barmode= 'overlay',
-                   histnorm = 'density'
-                   )
+def histpx():
+    fig = px.histogram(diabetesdf, x = 'Glucose',
+                    color = 'Outcome',
+                    marginal = 'box',
+                    barmode= 'overlay',
+                    histnorm = 'density'
+                    )
 
-fig.update_layout(
-    title_font_color="black",
-    legend_title_font_color="green",
-    title={
-        'text': "Glucose Histogram per Outcome",
-        'x':0.5,
-        'xanchor': 'center',
-        'yanchor': 'top'},
-)
-fig.show()
+    fig.update_layout(
+        title_font_color="black",
+        legend_title_font_color="green",
+        title={
+            'text': "Glucose Histogram per Outcome",
+            'x':0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'},
+    )
+    fig.show()
 
 #Problema: abre uma página no navegador e temos de ver se é dessa maneira que queremos visualizar o gráfico
 
@@ -118,6 +121,7 @@ def pairplt():
     sns.pairplot(diabetesdf, hue = "Outcome", diag_kind = "kde", palette = cores, plot_kws = {"s": 8})
     plt.title('Pairplot')
     plt.show()
+
 #Matriz de correlações
 def matrcorr():
     corr = diabetesdf.corr().round(2)
@@ -136,7 +140,7 @@ def varscatter(variavel_1,variavel_2):
     plt.title(f"Scatterplot of {variavel_1} by {variavel_2}")
     plt.show()
 
-varscatter("Glucose","BMI")
+#varscatter("Glucose","BMI")
 
 #caso o utilizador opte por fazer em função ou do outcome ou da variavel "GlycemiaValues" incorporar esta função
 def varscatter2(variavel1, variavel2, varcategorical):
@@ -144,8 +148,8 @@ def varscatter2(variavel1, variavel2, varcategorical):
     plt.title(f"Scatterplot of {variavel1} by {variavel2} in order to {varcategorical}")
     plt.show()
 
-varscatter2("Glucose","BMI","Outcome")
-varscatter2("Glucose","BMI","GlycemiaValues")
+#varscatter2("Glucose","BMI","Outcome")
+#varscatter2("Glucose","BMI","GlycemiaValues")
 
 #Nestas funções, as variáveis deviam ser pedidas pelo utlizador, ou seja input, 
 #e depois eram feitas verificações caso o nome da variável não fosse correto
