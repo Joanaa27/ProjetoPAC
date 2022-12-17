@@ -88,8 +88,8 @@ def circular(dataframe, vcategorical):
 #print((diabetesdf["GlycemiaValues"]=="Normal").value_counts()) #560
 #circular(diabetesdf,"Outcome")
 
-#histograma com função de densidade das variáveis em função do outcome
-def histvout(dataframe, vcategorical): 
+#histograma com função de densidade das variáveis em função do outcome ou glycemiavalues
+def hist_vcat(dataframe, vcategorical): 
 
     if vcategorical=="Outcome":
         #separam o outcome 0 de 1
@@ -119,7 +119,7 @@ def histvout(dataframe, vcategorical):
     plt.plot()
     plt.show()
 
-histvout(diabetesdf,"GlycemiaValues")
+#hist_vcat(diabetesdf,"GlycemiaValues")
 
 # Pairplot
 def pairplt(dataframe,vcategorical=None):
@@ -136,7 +136,7 @@ def pairplt(dataframe,vcategorical=None):
     plt.title(f"Pairplot of all numeric variables by {vcategorical}")
     plt.show()
 
-#pairplt(diabetes#df,"GlycemiaValues")
+#pairplt(diabetesdf,"GlycemiaValues")
 #pairplt(diabetesdf)
 
 #Matriz de correlações
