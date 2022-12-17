@@ -42,7 +42,7 @@ def boxplot_all(dataframe,drop_values, has_outcome=False):
     plt.title("Boxplot of numeric variables by Outcome") if has_outcome else plt.title("Boxplot of numeric variables")
     plt.show()
 
-#boxplot_all(diabetesdf)
+#boxplot_all(diabetesdf,["GlycemiaValues","Insulin"],True)
 
 
 #stripplot de todas as variavem em função da variável "Outcome"

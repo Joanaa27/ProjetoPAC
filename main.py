@@ -6,6 +6,21 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly_express as px
 
+#função para todos os fins de opção perguntar se quer continuar ou terminar a analise
+def terminar():
+    escolha=input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
+    escolha = escolha.lower()
+
+    while escolha != "sim" and escolha != "s" and escolha != "não" and escolha != "n" and escolha != "nao":
+        print("Resposta inválida. Escreva 'Sim' para continuar a análise e 'Não' para terminar. \n")
+        escolha=input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
+        escolha = escolha.lower()
+
+    if escolha == "sim" or escolha == "s":
+        menu()
+    else:
+        exit()
+
 #importação de todas as funções dos ficheiros Funçoes e Plots, para que possam ser chamadas neste ficheiro main
 from Plots import *
 from Funçoes import *
@@ -14,18 +29,16 @@ def menu():
     print("        [Menu] Escolhe uma das seguintes opções:")
     print("|                  0 - Visualização da DataFrame Diabetes                       |")
     print("|                  1 - Variables                      |")
-    print("|                  2 - Interaction                    |")
-    print("|                  3 - Correlations                   |")
-    print("|                  4 - Sample                         |")
-    print("|                  5 - Report                         |")
-    print("|                  6 - Sair                         |")
+    print("|                  2 - Interaction and Correlations                   |")
+    print("|                  3 - Report                         |")
+    print("|                  4 - Sair                         |")
     opcoes_menu()
 
 #opção 0 - visualização da data frame e de algumas informações relativas à mesma
 def opcoes_menu():
     opcao= int(input("Opção:"))
-    while opcao < 0 and opcao >= 6:
-        print("Tem de escolher uma opção entre 0 e 6")
+    while opcao < 0 and opcao >= 4:
+        print("Tem de escolher uma opção entre 0 e 4")
         menu()
     
     if opcao == 0:
@@ -39,8 +52,7 @@ def opcoes_menu():
             print(f"Tabela com as primeiras 20 observações da base de dados\n {tabelas(diabetesdf,2)}")
             terminar()
         else:
-            exit()
-        menu()
+            menu()
     
     elif opcao == 1:
         variavel= int(input("Escolha uma das seguintes opções:\n 0-Análise Geral das Variáveis Numéricas \n 1- "))
@@ -55,28 +67,15 @@ def opcoes_menu():
     #elif opcao == 3:
     #    função4
     
-    elif opcao == 5:
+    elif opcao == 4:
         #geração de um relatório automático sobre a analise da base de dados
         relatorio = ProfileReport(diabetesdf, title="Data Analysis of Diabetes Report")
         diabetesdf.profile_report()
         relatorio.to_file("diabetes_report.html")
     
-    elif opcao == 6:
+    elif opcao == 5:
         exit()
     #else:
 
 menu()
 
-#função para todos os fins de opção perguntar se quer continuar ou terminar a analise
-def terminar():
-    escolha=input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
-    escolha = escolha.lower()
-    while escolha != "sim" and escolha != "s" and escolha != "não" and escolha != "n" and escolha != "nao":
-        print("Resposta inválida. Escreva 'Sim' para continuar a análise e 'Não' para terminar. \n")
-        escolha=input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
-        escolha = escolha.lower()
-
-    if escolha == "sim" or escolha == "s":
-        menu()
-    elif escolha == "Não":
-        exit()
