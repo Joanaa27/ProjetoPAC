@@ -9,7 +9,7 @@ from Plots import *
 
 #Leitura de base de dados
 diabetes = pd.read_csv("diabetes.csv")
-diabetesdf=pd.DataFrame(diabetes)
+diabetesdf = pd.DataFrame(diabetes)
 variaveis = diabetes.columns
 
 """
@@ -26,49 +26,49 @@ mais de 200 mg/dL - diabetes
 x=[]
 for i in diabetes["Glucose"]:
     valor = ""
-    if i<=70:
-        valor= "Hypoglycemia"
-    elif i<=140:
-        valor= "Normal"
-    elif i<=199:
-        valor= "Pre-diabetes"
+    if i <= 70:
+        valor = "Hypoglycemia"
+    elif i <= 140:
+        valor = "Normal"
+    elif i <= 199:
+        valor = "Pre-diabetes"
     else:
-        valor= "Diabetes"
+        valor = "Diabetes"
     x.append(valor)
 
 #Adição da nova variável à base de dados
-diabetes.insert(loc=2, column="GlycemiaValues", value=x)
+diabetes.insert(loc = 2, column = "GlycemiaValues", value = x)
 #print(diabetes)
 
 #função para todos os fins de opção perguntar se quer continuar ou terminar a analise
 def terminar():
-    escolha=input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
-    escolha = escolha.lower()
+    escolha = input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
+    escolha = escolha.lower().title()
 
-    while escolha != "sim" and escolha != "s" and escolha != "não" and escolha != "n" and escolha != "nao":
+    while escolha != "Sim" and escolha != "Não" and escolha != "Nao":
         print("Resposta inválida. Escreva 'Sim' para continuar a análise e 'Não' para terminar. \n")
         escolha=input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
-        escolha = escolha.lower()
+        escolha = escolha.lower().title()
 
-    if escolha == "sim" or escolha == "s":
+    if escolha == "Sim" :
         menu()
     else:
         exit()
 
 
 def menu():
-    print("  [Menu] Escolhe uma das seguintes opções:")
-    print("|     0 - Visualização da DataFrame Diabetes   |")
-    print("|     1 - Variables - individual                           |")
-    print("|     2 - Variables - all                           |")
-    print("|     3 - Interaction and Correlations         |")
-    print("|     4 - Report                               |")
-    print("|     5 - Sair                                 |")
+    print("[Menu] Escolhe uma das seguintes opções:")
+    print("     0 - Visualização da base de dados")
+    print("     1 - Análise individual de variáveis")
+    print("     2 - Análise conjunta de variáveis")
+    print("     3 - Interações e Correlações entre as variáveis")
+    print("     4 - Relatório geral da base de dados")
+    print("     5 - Sair")
     opcoes_menu()
 
 #opção 0 - visualização da data frame e de algumas informações relativas à mesma
 def opcoes_menu():
-    opcao= int(input("Opção:"))
+    opcao = int(input("Opção:"))
     while opcao < 0 and opcao >= 4:
         print("Tem de escolher uma opção entre 0 e 4")
         menu()
@@ -76,11 +76,11 @@ def opcoes_menu():
     if opcao == 0:
         print(f"Base de Dados Diabetes:\n {diabetesdf}")
         print(f"Informações gerais sobre a base de dados:\n {diabetesdf.info()}")
-        opcaoa= int(input("Pretende ainda visualizar:\n 0- Tabela com as primeiras 20 observações \n 1- Tabela com medidas estatísticas das variáveis \n 2- Voltar ao Menu Principal \n Opção:"))
-        if opcaoa==0:
+        opcaoa = int(input("Pretende ainda visualizar:\n 0- Tabela com as primeiras 20 observações \n 1- Tabela com medidas estatísticas das variáveis \n 2- Voltar ao Menu Principal \n Opção:"))
+        if opcaoa == 0:
             print(f"Tabela com as primeiras 20 observações da base de dados\n {tabelas(diabetesdf,1)}")
             terminar()
-        elif opcaoa==1:
+        elif opcaoa == 1:
             print(f"Tabela com as medidas estatísticas das variáveis \n {tabelas(diabetesdf,2)}")
             terminar()
         else:
@@ -97,16 +97,15 @@ def opcoes_menu():
         print("            8: DiabetesPedigreeFunction       ")
         print("            9: Age                            ")
         print("            10: Outcome                       ")
-        variaveis= input(f"Escolha uma ou mais variáveis que deseja analisar utilizando os números do menu acima:")
+        variaveis = input(f"Escolha uma ou mais variáveis que deseja analisar utilizando os números do menu acima:")
 
-        """
+        
         outc_values(diabetesdf, vcategorical)
         circular(diabetesdf, vcategorical)
-
         hist_vcat(diabetesdf, vcategorical)
         var_num(diabetesdf, variaveis)
-        swarmplotvar(diabetesdf,variaveis,vcategorical=None)
-        """
+        swarmplotvar(diabetesdf, variaveis, vcategorical = None)
+        
 
     #elif opcao == 2:
     #    função3
@@ -116,7 +115,7 @@ def opcoes_menu():
     
     elif opcao == 4:
         #geração de um relatório automático sobre a analise da base de dados
-        relatorio = ProfileReport(diabetesdf, title="Data Analysis of Diabetes Report")
+        relatorio = ProfileReport(diabetesdf, title = "Data Analysis of Diabetes Report")
         diabetesdf.profile_report()
         relatorio.to_file("diabetes_report.html")
     
@@ -125,4 +124,3 @@ def opcoes_menu():
     #else:
 
 menu()
-
