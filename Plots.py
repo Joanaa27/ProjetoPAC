@@ -32,17 +32,16 @@ def tabelas(dataframe, id):
 
 #análise para cada variável numérica, breve descrição estatística (média, quartis, etc), histograma e boxplot para observar a distribuição 
 def var_num(dataframe, variaveis):
-
-    fig, ax = plt.subplots()
-    ax.axis('off')
-    ax.axis('tight')
     for i in variaveis:
-        df_var = dataframe[variaveis].describe()
+        fig, ax = plt.subplots()
+        ax.axis('off')
+        ax.axis('tight')
+        df_var = dataframe[i].describe()
         colnames = df_var.axes[0].tolist()
         tabela = ax.table(cellText = [df_var.values.round(2)],colLabels=colnames, loc = 'center')
         tabela.auto_set_font_size(False)
         tabela.set_fontsize(8)
-        print(f"Table of statistical values of {variaveis}")
+        plt.title(f"Table of statistical values of {i}")
         plt.show()
     
         sns.histplot(data = dataframe, x=i,kde = True)
@@ -54,14 +53,6 @@ def var_num(dataframe, variaveis):
         plt.show()
 
 #var_num(diabetesdf,["Insulin"])
-
-
-#função para efetuar boxplots de uma variavel numérica em função de uma das 2 variaveis(categoria) Outcome ou GlycemiaValues
-def varboxplot (variavel,categoria):
-    sns.boxplot(data = diabetesdf, x = variavel, y = categoria, hue = categoria, dodge = False)
-    plt.title(f"Boxplot of {variavel} by {categoria}")
-    plt.show()
-#varboxplot("Glucose","Outcome")
 
 #histograma e função densididade de TODAS as variaveis em função do "Outcome" e "GlycemiaValues"
 def hist_total(dataframe,has_outcome = False):
@@ -125,7 +116,6 @@ def swarmplotvar(dataframe, variaveis, vcategorical = None):
 #eliminar a coluna GlycemiaValues porque não queremos e não faz sentido aparecer na dataframe
 #dropvalues - é uma lista com as variaveis que o utilizador nao quer vizualizar, sendo que a variavel "GlycemiaValues é obrigatória de descartar
 def boxplot_all(dataframe, drop_values, has_outcome = False):
-   
     diabetesbp = dataframe.drop(drop_values, axis = 1)
     diabetes_melted = pd.melt(diabetesbp, id_vars = "Outcome", var_name = "variables", value_name = "value")
     
@@ -135,7 +125,7 @@ def boxplot_all(dataframe, drop_values, has_outcome = False):
     plt.title("Boxplot of numeric variables by Outcome") if has_outcome else plt.title("Boxplot of numeric variables")
     plt.show()
 
-#boxplot_all(diabetesdf, ["GlycemiaValues","Insulin"], True)
+#boxplot_all(diabetesdf, ["BMI","Insulin"], True)
 
 
 #stripplot de todas as variavem em função da variável "Outcome"
