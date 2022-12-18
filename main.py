@@ -64,8 +64,9 @@ def menu():
     print("     2 - Análise individual de variáveis categóricas")
     print("     3 - Análise conjunta de variáveis")
     print("     4 - Interações e Correlações entre as variáveis")
-    print("     5 - Relatório geral da base de dados")
-    print("     6 - Sair")
+    print("     5 - Cálculos das medidas amostrais das variáveis")
+    print("     6 - Relatório geral da base de dados")
+    print("     7 - Sair")
     opcoes_menu()
 
 def menu_opcao():
@@ -80,7 +81,7 @@ def menu_opcao():
 
 def menu_opcao1b():
     def print_menu_opcao1b():
-        print("           0: Variaveis numéricas                     ")
+        print("           0: Representação estatística e gráfica     ")
         print("           1: Swarmplot                               ")
         print("           2: Histograma com função densidade         ")
 
@@ -155,8 +156,8 @@ def get_lista_variaveis():
             menu_opcao()
             variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima: "))
             print(variaveis)
-            while variaveis <0 or variaveis> 9:
-                print("Tem de escolher um número válido, de 0 a 9.")
+            while variaveis <0 or variaveis> 7:
+                print("Tem de escolher um número válido, de 0 a 7.")
                 menu_opcao()
                 variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima: "))
             if variaveis not in list_variaveis:
@@ -190,8 +191,8 @@ def dropval():
 
     while valores_drop not in ("sim" ,"não", "nao", "s","n"):
         print("entrei dentro do while")
-        print("Resposta inválida. Escreva 'Sim' para continuar a análise e 'Não' para terminar. \n")
-        valores_drop=input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
+        print("Resposta inválida.")
+        valores_drop=input("Deseja eliminar alguma variável da análise? Sim ou Não? \n")
         valores_drop = valores_drop.lower()
 
     if valores_drop in ("sim" ,"s"):
@@ -216,18 +217,20 @@ def outcom():
     return has_outcome
 
 
+
 ### MENU ###
 
 #opção 0 - visualização da data frame e de algumas informações relativas à mesma
 def opcoes_menu():
     opcao = int(input("Opção:"))
-    while opcao < 0 and opcao >= 4:
-        print("Tem de escolher uma opção entre 0 e 4")
+    while opcao < 0 or opcao > 7:
+        print("Tem de escolher uma opção entre 0 e 7")
         menu()
 
     if opcao == 0:
         print(f"Base de Dados Diabetes:\n {diabetesdf}")
-        print(f"Informações gerais sobre a base de dados:\n {diabetesdf.info()}")
+        print("Informações gerais sobre a base de dados:\n")
+        print(diabetesdf.info())
         opcaoa = int(input("Pretende ainda visualizar:\n 0- Tabela com as primeiras 20 observações \n 1- Tabela com medidas estatísticas das variáveis \n 2- Voltar ao Menu Principal \n Opção:"))
         if opcaoa == 0:
             print(f"Tabela com as primeiras 20 observações da base de dados\n {tabelas(diabetesdf,1)}")
@@ -241,6 +244,7 @@ def opcoes_menu():
     elif opcao == 1:
         list_converted = get_lista_variaveis()
         escolha2 = menu_opcao1b()
+        print(list_converted)
         if escolha2==0:
             var_num(diabetesdf, list_converted)
             terminar()
@@ -295,19 +299,17 @@ def opcoes_menu():
             terminar()
     
     #elif opcao == 4:
+    #matrcorr(diabetesdf)
+    #scatterplt(dataframe, variavel_1, variavel_2, vcategorical = None)
+    #regressao (dataframe, variavel_1, variavel_2, vcategorical = None)
     
-    elif opcao == 5:
+    elif opcao == 6:
         #geração de um relatório automático sobre a analise da base de dados
         relatorio = ProfileReport(diabetesdf, title = "Relatório da Análise da Base de Dados Diabetes")
         diabetesdf.profile_report()
         relatorio.to_file("diabetes_report.html")
     
-    elif opcao == 6:
+    elif opcao == 7:
         exit()
-    #else:
 
 menu()
-
-
-        #outc_values(diabetesdf, vcategorical) #damos a opçao Outcome ou GlycemiaValues
-        #circular(diabetesdf, vcategorical) #damos a opção Outcome ou GlycemiaValues

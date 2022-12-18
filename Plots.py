@@ -44,7 +44,7 @@ def var_num(dataframe, variaveis):
         plt.title(f"Table of statistical values of {i}")
         plt.show()
     
-        sns.histplot(data = dataframe, x=i,kde = True)
+        sns.histplot(data = dataframe, x=i)
         plt.title(f"Histogram of {i}")
         plt.show()
 
@@ -126,7 +126,6 @@ def boxplot_all(dataframe, drop_values, has_outcome = False):
     plt.show()
 
 #boxplot_all(diabetesdf, ["BMI","Insulin"], True)
-
 
 #stripplot de todas as variavem em função da variável "Outcome"
 #eliminar a coluna GlycemiaValues porque não queremos e não faz sentido aparecer na dataframe0
@@ -241,7 +240,6 @@ def scatterplt(dataframe, variavel_1, variavel_2, vcategorical = None):
 
 #scatterplt(diabetesdf,"Glucose","BMI")
 #scatterplt(diabetesdf,"Glucose","BMI","GlycemiaValues")
-
 
 
 #######################################################################################
