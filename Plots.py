@@ -150,6 +150,7 @@ def categorica_values(dataframe, vcategorical):
     plt.figure()
     sns.countplot(x = dataframe[vcategorical], data = dataframe, hue_order = order)
     plt.title(f"Distribution of {vcategorical}")
+    plt.savefig('categorica_values.png')
     plt.show()
 
 #categorica_values("GlycemiaValues")
@@ -202,16 +203,9 @@ def hist_vcat(dataframe, vcategorical, variaveis):
 
 # Pairplot
 def pairplt(dataframe, vcategorical = None):
-    if vcategorical == "Outcome":
-        cores = {0: 'blue', 1: 'green'}
-    elif vcategorical == "GlycemiaValues":
-        cores = {'Hypoglycemia': 'yellow', 'Normal': 'green', 'Pre-diabetes': 'blue'}
-    else:
-        cores = None
-
     plt.figure()
     sns.set(font_scale = 0.7)
-    sns.pairplot(dataframe, hue = vcategorical, diag_kind = "kde", palette = cores, plot_kws = {"s": 8})
+    sns.pairplot(dataframe, hue = vcategorical, diag_kind = "kde", plot_kws = {"s": 8})
     plt.title(f"Pairplot of all numeric variables by {vcategorical}")
     plt.show()
 
@@ -236,11 +230,11 @@ def scatterplt(dataframe, variavel_1, variavel_2, vcategorical = None):
     print(f"Variável no eixo dos xx: {variavel_1} \nVariável no eixo dos yy: {variavel_2}")
     sns.scatterplot(data = dataframe, x = variavel_1, y = variavel_2, hue = vcategorical)
     plt.title(f"Scatterplot of {variavel_1} by {variavel_2} in order to {vcategorical}") if vcategorical is not None else plt.title(f"Scatterplot of {variavel_1} by {variavel_2}") 
+    plt.legend()
     plt.show()
 
 #scatterplt(diabetesdf,"Glucose","BMI")
 #scatterplt(diabetesdf,"Glucose","BMI","GlycemiaValues")
-
 
 #######################################################################################
 #Histogramas + boxplots (lado a lado) para uma variável numerica em função do outcome
