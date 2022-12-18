@@ -66,6 +66,19 @@ def menu():
     print("|     5 - Sair                                 |")
     opcoes_menu()
 
+def menu_opcao():
+    print("            0: Pregnancies                    ")
+    print("            1: Glucose                        ")
+    print("            2: GlycemiaValues                 ")
+    print("            3: BloodPressure                  ")
+    print("            4: SkinThickness                  ")
+    print("            Insulin                        ")
+    print("            BMI                            ")
+    print("            DiabetesPedigreeFunction       ")
+    print("            Age                            ")
+    print("            Outcome                       ")
+
+
 #opção 0 - visualização da data frame e de algumas informações relativas à mesma
 def opcoes_menu():
     opcao= int(input("Opção:"))
@@ -87,23 +100,55 @@ def opcoes_menu():
             menu()
     
     elif opcao == 1:
-        print("            1: Pregnancies                    ")
-        print("            2: Glucose                        ")
-        print("            3: GlycemiaValues                 ")
-        print("            4: BloodPressure                  ")
-        print("            5: SkinThickness                  ")
-        print("            6: Insulin                        ")
-        print("            7: BMI                            ")
-        print("            8: DiabetesPedigreeFunction       ")
-        print("            9: Age                            ")
-        print("            10: Outcome                       ")
-        variaveis= input(f"Escolha uma ou mais variáveis que deseja analisar utilizando os números do menu acima:")
+        dict_variaveis={0: "Pregnancies", 1: "Glucose", 2: "GlycemiaValues", 3: "BloodPressure", 4: "SkinThickness", 5: "Insulin", 6: "BMI", 7: "DiabetesPedigreeFunction", 8: "Age", 9:"Outcome"}
+        menu_opcao()
+        variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima:"))
+        
+        while variaveis <0 or variaveis> 9:
+            print("Tem de escolher um número válido, de 0 a 9.")
+            variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima:"))
 
+        list_variaveis=[]
+        if variaveis not in list_variaveis:
+            list_variaveis.append(variaveis)
+        else:
+            print("Esta variável já foi adicionada à lista.")
+
+        escolha= input("Deseja escolher outra variável para análise? Sim ou Não? \n")
+        escolha=escolha.lower()
+        while escolha not in ("não" ,"n","nao"):
+            #print("Resposta inválida. Escreva 'Sim' para continuar a análise e 'Não' para terminar. \n")
+            #escolha=input("Deseja escolher outra variável para análise? Sim ou Não? \n")
+            #escolha = escolha.lower()
+            
+            ##TODO: arranjar este problema, quando a resposta não é sim nem nao simplesmente termina e nao diz que é invalido e pede novamente
+
+            if escolha in ("sim" , "s"):
+                menu_opcao()
+                variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima: "))
+                print(variaveis)
+                while variaveis <0 or variaveis> 9:
+                    print("Tem de escolher um número válido, de 0 a 9.")
+                    menu_opcao()
+                    variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima: "))
+                print("passei o while")
+                if variaveis not in list_variaveis:
+                    list_variaveis.append(variaveis)
+                else:
+                    print("Esta variável já foi adicionada à lista.")
+                escolha= input("Deseja escolher outra variável para análise? Sim ou Não? \n")
+                escolha=escolha.lower()
+            else:
+                break
+
+        list_converted=[dict_variaveis.get(v) for v in list_variaveis]
+        print(list_converted)
         """
         outc_values(diabetesdf, vcategorical)
         circular(diabetesdf, vcategorical)
+        
+        hist_vcat(diabetesdf, vcategorical,variaveis)
 
-        hist_vcat(diabetesdf, vcategorical)
         var_num(diabetesdf, variaveis)
         swarmplotvar(diabetesdf,variaveis,vcategorical=None)
         """

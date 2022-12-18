@@ -195,15 +195,15 @@ def hist_vcat(dataframe, vcategorical, variaveis):
         cores = {'Hypoglycemia': 'yellow', 'Normal': 'green', 'Pre-diabetes': 'blue'}
 
     counter = 0
-    for val in variaveis:
+    for var in variaveis:
         counter += 1
-        print(counter, ':', val)
-        sns.displot(data = df_bal, kde=True, x = dataframe[str(val)], hue=vcategorical, palette=cores)
-        plt.title(f'"{val}" by {vcategorical}')
+        print(counter, ':', var)
+        sns.displot(data = df_bal, kde=True, x = dataframe[str(var)], hue=vcategorical, palette=cores)
+        plt.title(f'"{var}" by {vcategorical}')
     plt.plot()
     plt.show()
 
-#hist_vcat(diabetesdf,"GlycemiaValues")
+#hist_vcat(diabetesdf,"GlycemiaValues","Glucose")
 
 # Pairplot
 def pairplt(dataframe,vcategorical=None):
