@@ -92,9 +92,30 @@ def menu_opcao1b():
         escolha2=int(input("       Escolha o gráfico que pretende visualizar:     "))
     return escolha2
 
+def menu_opcao2():
+    def print_menu_opcao2():
+        print("G: GlycemiaValues")
+        print("O: Outcome")
+    print_menu_opcao2()
+    escolha3=input("Escolha a variável que pretende analisar, do menu acima:  ")
+    escolha3=escolha3.lower()
+    while escolha3 not in ("g","o"):
+        print("Resposta inválida.")
+        print_menu_opcao2()
+        escolha3=input("Escolha a variável que pretende analisar, do menu acima:  ")
+    return escolha3
 
-
-
+def menu_categoricas():
+    def print_menu_2b():
+        print("0: Gráfico de Barras")
+        print("1: Gráfico Circular")
+    print_menu_2b()
+    escolha3b=int(input("Escolha o gráfico do menu acima que pretende visualizar:  "))
+    while escolha3b not in (0,1):
+        print("Resposta inválida.")
+        print_menu_2b()
+        escolha3b=int(input("Escolha o gráfico do menu acima que pretende visualizar:  "))
+    return escolha3b
 
 #opção 0 - visualização da data frame e de algumas informações relativas à mesma
 def opcoes_menu():
@@ -102,7 +123,7 @@ def opcoes_menu():
     while opcao < 0 and opcao >= 4:
         print("Tem de escolher uma opção entre 0 e 4")
         menu()
-    
+    dict_vcateg={"o":"Outcome","g": "GlycemiaValues","n":"None"}
     if opcao == 0:
         print(f"Base de Dados Diabetes:\n {diabetesdf}")
         print(f"Informações gerais sobre a base de dados:\n {diabetesdf.info()}")
@@ -158,7 +179,6 @@ def opcoes_menu():
         print(list_converted)
 
         escolha2 = menu_opcao1b()
-        dict_vcateg={"o":"Outcome","g": "GlycemiaValues","n":"None"}
         if escolha2==0:
             var_num(diabetesdf, list_converted)
             terminar()
@@ -181,16 +201,31 @@ def opcoes_menu():
             hist_vcat(diabetesdf, vcategorical,list_converted) #damos a opção Outcome ou GlycemiaValues
             terminar()
 
-
-    #elif opcao == 2:
-    
+    elif opcao == 2:
+        escolha3b=menu_categoricas()
+        escolha3=menu_opcao2()
+        if escolha3b==0:
+            if escolha3=="g":
+                categorica_values(diabetesdf, dict_vcateg.get(escolha3))
+                terminar()
+            else:
+                categorica_values(diabetesdf, dict_vcateg.get(escolha3))
+                terminar()
+        else:
+            if escolha3=="g":
+                circular(diabetesdf, dict_vcateg.get(escolha3))
+                terminar()
+            else:
+                circular(diabetesdf, dict_vcateg.get(escolha3))
+                terminar()
+                
     #elif opcao == 3:
     
     #elif opcao == 4:
     
     elif opcao == 5:
         #geração de um relatório automático sobre a analise da base de dados
-        relatorio = ProfileReport(diabetesdf, title = "Data Analysis of Diabetes Report")
+        relatorio = ProfileReport(diabetesdf, title = "Relatório da Análise da Base de Dados Diabetes")
         diabetesdf.profile_report()
         relatorio.to_file("diabetes_report.html")
     

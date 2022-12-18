@@ -152,7 +152,7 @@ def stripvar(dataframe, drop_values, has_outcome = False):
 #stripvar(diabetesdf,["GlycemiaValues","Insulin"],True)
 
 #Gráfico de barras com a contagem de outcomes ou de GlycemiaValues
-def outc_values(dataframe, vcategorical):
+def categorica_values(dataframe, vcategorical):
     order = []
     if vcategorical == "Outcome":
         order = [0,1]
@@ -163,7 +163,7 @@ def outc_values(dataframe, vcategorical):
     plt.title(f"Distribution of {vcategorical}")
     plt.show()
 
-#outc_values("GlycemiaValues")
+#categorica_values("GlycemiaValues")
 
 #grafico circular do outcome 0 e 1  e da variavel criada "GlycemiaValues"
 def circular(dataframe, vcategorical):
