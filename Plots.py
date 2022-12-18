@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 #Leitura de base de dados
 diabetes = pd.read_csv("diabetes.csv")
 diabetesdf = pd.DataFrame(diabetes)
-variaveis = diabetes.columns
+#variaveis = diabetes.columns
 
 #tabela da dataframe - 1 ou tabela com propriedades estatísticas das variáveis numéricas -2
 def tabelas(dataframe, id):
@@ -28,31 +28,32 @@ def tabelas(dataframe, id):
     plt.show()
 
 #tabelas(diabetesdf, 1)
-tabelas(diabetesdf, 2)
+#tabelas(diabetesdf, 2)
 
 #análise para cada variável numérica, breve descrição estatística (média, quartis, etc), histograma e boxplot para observar a distribuição 
 def var_num(dataframe, variaveis):
-    print(variaveis)
+
     fig, ax = plt.subplots()
     ax.axis('off')
     ax.axis('tight')
-    df_var = dataframe[variaveis].describe()
-    colnames = df_var.axes[0].tolist()
-    tabela = ax.table(cellText = [df_var.values.round(2)],colLabels=colnames, loc = 'center')
-    tabela.auto_set_font_size(False)
-    tabela.set_fontsize(8)
-    print(f"Tabela das medidas estatísticas de {variaveis}")
-    plt.show()
+    for i in variaveis:
+        df_var = dataframe[variaveis].describe()
+        colnames = df_var.axes[0].tolist()
+        tabela = ax.table(cellText = [df_var.values.round(2)],colLabels=colnames, loc = 'center')
+        tabela.auto_set_font_size(False)
+        tabela.set_fontsize(8)
+        print(f"Table of statistical values of {variaveis}")
+        plt.show()
     
-    sns.histplot(data = dataframe, x=variaveis,kde = True)
-    plt.title(f"Histogram of {variaveis}")
-    plt.show()
+        sns.histplot(data = dataframe, x=i,kde = True)
+        plt.title(f"Histogram of {i}")
+        plt.show()
 
-    sns.boxplot(data = dataframe, x = variaveis)
-    plt.title(f"Boxplot of {variaveis}")
-    plt.show()
+        sns.boxplot(data = dataframe, x = i)
+        plt.title(f"Boxplot of {i}")
+        plt.show()
 
-#var_num(diabetesdf,"Insulin")
+#var_num(diabetesdf,["Insulin"])
 
 
 #função para efetuar boxplots de uma variavel numérica em função de uma das 2 variaveis(categoria) Outcome ou GlycemiaValues
@@ -111,11 +112,12 @@ def regressao (dataframe, variavel_1, variavel_2, vcategorical = None):
 #regressao(diabetesdf, "Glucose", "Age")
 
 def swarmplotvar(dataframe, variaveis, vcategorical = None):
-    sns.catplot(x = vcategorical, y = variaveis, hue = vcategorical, kind = "swarm", data = dataframe) 
-    plt.title(f"Swarmplot of {variaveis} by {vcategorical}")
-    plt.show()
+    for s in variaveis:
+        sns.catplot(x = vcategorical, y = s, hue = vcategorical, kind = "swarm", data = dataframe) 
+        plt.title(f"Swarmplot of {s} by {vcategorical}")
+        plt.show()
 
-#swarmplotvar(diabetesdf,"BMI","Outcome")
+#swarmplotvar(diabetesdf,["BMI"],"Outcome")
 #swarmplotvar(diabetesdf,"BMI","GlycemiaValues")
 #swarmplotvar(diabetesdf,"BMI")
 
@@ -179,7 +181,6 @@ def circular(dataframe, vcategorical):
 #print((diabetesdf["GlycemiaValues"] == "Normal").value_counts()) #560
 #circular(diabetesdf, "Outcome")
 
-#histograma com função de densidade das variáveis em função do outcome ou glycemiavalues
 def hist_vcat(dataframe, vcategorical, variaveis): 
 
     if vcategorical == "Outcome":
@@ -208,7 +209,7 @@ def hist_vcat(dataframe, vcategorical, variaveis):
     plt.plot()
     plt.show()
 
-#hist_vcat(diabetesdf,"GlycemiaValues","Glucose")
+#hist_vcat(diabetesdf,"GlycemiaValues",["Glucose"])
 
 # Pairplot
 def pairplt(dataframe, vcategorical = None):

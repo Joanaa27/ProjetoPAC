@@ -40,6 +40,7 @@ for i in diabetes["Glucose"]:
 diabetes.insert(loc = 2, column = "GlycemiaValues", value = x)
 #print(diabetes)
 
+
 #função para todos os fins de opção perguntar se quer continuar ou terminar a analise
 def terminar():
     escolha = input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
