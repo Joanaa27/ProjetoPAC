@@ -132,16 +132,14 @@ def menu_3():
         escolha4=int(input("Escolha o gráfico do menu acima que pretende visualizar:  "))
     return escolha4
 
-    print_menu3
-
 def get_lista_variaveis():
     dict_variaveis={0: "Pregnancies", 1: "Glucose", 2: "BloodPressure", 3: "SkinThickness", 4: "Insulin", 5: "BMI", 6: "DiabetesPedigreeFunction", 7: "Age"}
     menu_opcao()
-    variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima:"))
+    variaveis= int(input("Escolha a variável utilizando os números indicados no menu acima: \n"))
         
     while variaveis <0 or variaveis> 7:
         print("Tem de escolher um número válido, de 0 a 7.")
-        variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima:"))
+        variaveis= int(input("Escolha a variável utilizando os números indicados no menu acima: \n"))
 
     list_variaveis=[]
     if variaveis not in list_variaveis:
@@ -149,26 +147,26 @@ def get_lista_variaveis():
     else:
         print("Esta variável já foi adicionada à lista.")
 
-    escolha= input("Deseja escolher outra variável para análise? Sim ou Não? \n")
+    escolha= input("Deseja escolher outra variável? Sim ou Não? \n")
     escolha=escolha.lower()
     while escolha not in ("não" ,"n","nao"):
         if escolha in ("sim" , "s"):
             menu_opcao()
-            variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima: "))
+            variaveis= int(input("Escolha a variável utilizando os números indicados no menu acima: \n"))
             print(variaveis)
             while variaveis <0 or variaveis> 7:
                 print("Tem de escolher um número válido, de 0 a 7.")
                 menu_opcao()
-                variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima: "))
+                variaveis= int(input("Escolha a variável utilizando os números indicados no menu acima: \n"))
             if variaveis not in list_variaveis:
                 list_variaveis.append(variaveis)
             else:
                 print("Esta variável já foi adicionada à lista.")
-            escolha= input("Deseja escolher outra variável para análise? Sim ou Não? \n")
+            escolha= input("Deseja escolher outra variável? Sim ou Não? \n")
             escolha=escolha.lower()
         else:
             print("Resposta inválida.")
-            escolha=input("Deseja escolher outra variável para análise? Sim ou Não? \n")
+            escolha=input("Deseja escolher outra variável? Sim ou Não? \n")
             escolha = escolha.lower()
 
     list_converted=[dict_variaveis.get(v) for v in list_variaveis]
@@ -186,11 +184,10 @@ def varcategorical():
 
 def dropval():
     drop_values=[]
-    valores_drop=input("Deseja eliminar alguma variável da análise? Sim ou Não?")
+    valores_drop=input("Deseja eliminar alguma variável da análise? Sim ou Não? \n")
     valores_drop=valores_drop.lower()
 
     while valores_drop not in ("sim" ,"não", "nao", "s","n"):
-        print("entrei dentro do while")
         print("Resposta inválida.")
         valores_drop=input("Deseja eliminar alguma variável da análise? Sim ou Não? \n")
         valores_drop = valores_drop.lower()
@@ -216,7 +213,30 @@ def outcom():
     
     return has_outcome
 
+def menu_4():
+    def print_menu4():
+        print("    0: Gráficos de dispersão")
+        print("    1: Regressão linear     ")
+        print("    2: Matriz de correlações")
+    print_menu4()
+    escolha5=int(input("Escolha o gráfico do menu acima que pretende visualizar:  "))
+    while escolha5 not in (0,1,2):
+        print("Resposta inválida.")
+        print_menu4()
+        escolha5=int(input("Escolha o gráfico do menu acima que pretende visualizar:  "))
+    return escolha5
 
+def variavel():
+    dict_variaveis={0: "Pregnancies", 1: "Glucose", 2: "BloodPressure", 3: "SkinThickness", 4: "Insulin", 5: "BMI", 6: "DiabetesPedigreeFunction", 7: "Age"}
+    menu_opcao()
+    variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima:"))
+        
+    while variaveis <0 or variaveis> 7:
+        print("Tem de escolher um número válido, de 0 a 7.")
+        variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima:"))
+
+    variavel_x=dict_variaveis.get(variaveis)
+    return variavel_x
 
 ### MENU ###
 
@@ -244,6 +264,7 @@ def opcoes_menu():
     elif opcao == 1:
         list_converted = get_lista_variaveis()
         escolha2 = menu_opcao1b()
+
         print(list_converted)
         if escolha2==0:
             var_num(diabetesdf, list_converted)
@@ -260,6 +281,7 @@ def opcoes_menu():
     elif opcao == 2:
         escolha3b=menu_categoricas()
         escolha3=menu_opcao2()
+        dict_vcateg={"o":"Outcome","g": "GlycemiaValues","n":"None"}
         if escolha3b==0:
             if escolha3=="g":
                 categorica_values(diabetesdf, dict_vcateg.get(escolha3))
@@ -298,11 +320,38 @@ def opcoes_menu():
             hist_total(diabetesdf,has_outcome)
             terminar()
     
-    #elif opcao == 4:
-    #matrcorr(diabetesdf)
-    #scatterplt(dataframe, variavel_1, variavel_2, vcategorical = None)
-    #regressao (dataframe, variavel_1, variavel_2, vcategorical = None)
-    
+    elif opcao == 4:
+        escolha5=menu_4()
+        if escolha5==0:
+            print("Variável do eixo dos xx")
+            variavel_1= variavel()
+            print("Variável do eixo dos yy")
+            variavel_2=variavel()
+            while variavel_2 == variavel_1:
+                print("As variáveis não podem ser iguais.")
+                print("Variável do eixo dos yy")
+                variavel_2= variavel()
+            vcategorical=varcategorical()
+            regressao (diabetesdf, variavel_1, variavel_2, vcategorical)
+            terminar()
+
+        elif escolha5==1:
+            print("Variável do eixo dos xx")
+            variavel_1= variavel()
+            print("Variável do eixo dos yy")
+            variavel_2=variavel()
+            while variavel_2 == variavel_1:
+                print("As variáveis não podem ser iguais.")
+                print("Variável do eixo dos yy")
+                variavel_2= variavel()
+            vcategorical=varcategorical()
+            scatterplt(diabetesdf, variavel_1, variavel_2, vcategorical)
+            terminar()
+
+        else:
+            matrcorr(diabetesdf)
+            terminar()
+
     elif opcao == 6:
         #geração de um relatório automático sobre a analise da base de dados
         relatorio = ProfileReport(diabetesdf, title = "Relatório da Análise da Base de Dados Diabetes")
