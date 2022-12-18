@@ -173,7 +173,7 @@ def get_lista_variaveis():
     return list_converted
 
 def varcategorical():
-    dict_vcateg={"o":"Outcome","g": "GlycemiaValues","n":"None"}
+    dict_vcateg={"o":"Outcome","g": "GlycemiaValues","n":None}
     vcategorical = input("Deseja fazer em função da variável Outcome (O), da variável GlycemiaValues (G) ou Nenhuma (N)? \n")
     vcategorical=vcategorical.lower()
     while vcategorical not in ("o" , "g","n"):
@@ -281,7 +281,7 @@ def opcoes_menu():
     elif opcao == 2:
         escolha3b=menu_categoricas()
         escolha3=menu_opcao2()
-        dict_vcateg={"o":"Outcome","g": "GlycemiaValues","n":"None"}
+        dict_vcateg={"o":"Outcome","g": "GlycemiaValues","n":None}
         if escolha3b==0:
             if escolha3=="g":
                 categorica_values(diabetesdf, dict_vcateg.get(escolha3))
@@ -305,7 +305,6 @@ def opcoes_menu():
             has_outcome = outcom()
             
             boxplot_all(diabetesdf, drop_values, has_outcome)
-            #TODO plt.savefig("boxplot_all.png")
             terminar()
         elif escolha4==1:
             drop_values = dropval()

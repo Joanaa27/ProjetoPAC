@@ -25,6 +25,7 @@ def tabelas(dataframe, id):
         tabela = ax.table(cellText = desc.values.round(2), colWidths = [0.1] * len(dataframe.columns), colLabels = dataframe.columns, rowLabels = rownames, loc = 'center')
     tabela.auto_set_font_size(False)
     tabela.set_fontsize(8)
+    plt.savefig("tabela.png")
     plt.show()
 
 #tabelas(diabetesdf, 1)
@@ -42,14 +43,17 @@ def var_num(dataframe, variaveis):
         tabela.auto_set_font_size(False)
         tabela.set_fontsize(8)
         plt.title(f"Table of statistical values of {i}")
+        plt.savefig("tabela_stats.png")
         plt.show()
     
         sns.histplot(data = dataframe, x=i)
         plt.title(f"Histogram of {i}")
+        plt.savefig("histogram_variavel_numerica.png")
         plt.show()
 
         sns.boxplot(data = dataframe, x = i)
         plt.title(f"Boxplot of {i}")
+        plt.savefig("boxplot_variavel_numerica.png")
         plt.show()
 
 #var_num(diabetesdf,["Insulin"])
@@ -65,6 +69,7 @@ def hist_total(dataframe,has_outcome = False):
         sns.histplot(data = dataframe, x = dataframe[str(i)], hue = "Outcome", multiple  = 'dodge', kde = True) if has_outcome else sns.histplot(data = dataframe, x = dataframe[str(i)], multiple  = 'dodge', kde = True)
     plt.suptitle("Histogram of all variables by Outcome", fontsize = 16) if has_outcome else plt.suptitle("Histogram of all variables", fontsize = 16)
     plt.plot()
+    plt.savefig("histogram_all.png")
     plt.show()
 
 #hist_total(diabetesdf)
@@ -96,6 +101,7 @@ def regressao (dataframe, variavel_1, variavel_2, vcategorical = None):
         sns.regplot(x = variavel_1, y = variavel_2, data = dataframe, color = 'blue')
 
     plt.title(f"{variavel_1} vs {variavel_2} scatterplot by {vcategorical}")
+    plt.savefig("regressao.png")
     plt.show()
 
 #regressao(diabetesdf, "Glucose", "Age", "GlycemiaValues")
@@ -106,6 +112,7 @@ def swarmplotvar(dataframe, variaveis, vcategorical = None):
     for s in variaveis:
         sns.catplot(x = vcategorical, y = s, hue = vcategorical, kind = "swarm", data = dataframe) 
         plt.title(f"Swarmplot of {s} by {vcategorical}")
+        plt.savefig("swarmplot.png")
         plt.show()
 
 #swarmplotvar(diabetesdf,["BMI"],"Outcome")
@@ -123,6 +130,7 @@ def boxplot_all(dataframe, drop_values, has_outcome = False):
 
     sns.boxplot(data = diabetes_melted, x = "variables", y = "value", hue = "Outcome") if has_outcome else sns.boxplot(data = diabetes_melted, x = "variables", y = "value")
     plt.title("Boxplot of numeric variables by Outcome") if has_outcome else plt.title("Boxplot of numeric variables")
+    plt.savefig("boxplot_all.png")
     plt.show()
 
 #boxplot_all(diabetesdf, ["BMI","Insulin"], True)
@@ -136,6 +144,7 @@ def stripvar(dataframe, drop_values, has_outcome = False):
     plt.figure(figsize = (15, 15))
     sns.stripplot(x = "variables", y = "value", hue = "Outcome", data = diabetes_melted) if has_outcome else sns.stripplot(x = "variables", y = "value", data = diabetes_melted)
     plt.title("Stripplot of numeric variables by Outcome")  if has_outcome else plt.title("Stripplot of numeric variables")
+    plt.savefig("stripplot.png")
     plt.show()
 
 #stripvar(diabetesdf,["GlycemiaValues","Insulin"],True)
@@ -150,7 +159,7 @@ def categorica_values(dataframe, vcategorical):
     plt.figure()
     sns.countplot(x = dataframe[vcategorical], data = dataframe, hue_order = order)
     plt.title(f"Distribution of {vcategorical}")
-    plt.savefig('categorica_values.png')
+    plt.savefig("barplot_variavel_categorica.png")
     plt.show()
 
 #categorica_values("GlycemiaValues")
@@ -166,6 +175,7 @@ def circular(dataframe, vcategorical):
     plt.figure(figsize = (10,7))
     plt.pie(dataframe[vcategorical].value_counts(), labels = labels, autopct = '%0.02f%%')
     plt.legend()
+    plt.savefig("circular_var_categorica.png")
     plt.show()
 
 #print((diabetesdf["GlycemiaValues"] == "Normal").value_counts()) #560
@@ -195,8 +205,9 @@ def hist_vcat(dataframe, vcategorical, variaveis):
         counter += 1
         print(counter, ':', var)
         sns.displot(data = df_bal, kde=True, x = dataframe[str(var)], hue=vcategorical, palette=cores)
-        plt.title(f'"{var}" by {vcategorical}')
+        plt.title(f'Histogram of "{var}" by {vcategorical}')
     plt.plot()
+    plt.savefig("histogram_variaveis_numericas.png")
     plt.show()
 
 #hist_vcat(diabetesdf,"GlycemiaValues",["Glucose"])
@@ -207,6 +218,7 @@ def pairplt(dataframe, vcategorical = None):
     sns.set(font_scale = 0.7)
     sns.pairplot(dataframe, hue = vcategorical, diag_kind = "kde", plot_kws = {"s": 8})
     plt.title(f"Pairplot of all numeric variables by {vcategorical}")
+    plt.savefig("pairplot.png")
     plt.show()
 
 #pairplt(diabetesdf, "GlycemiaValues")
@@ -221,6 +233,7 @@ def matrcorr(dataframe):
     mask[np.triu_indices_from(mask)] = True
     sns.heatmap(corr, annot = True, cmap = 'BuPu', mask = mask, cbar = True)
     plt.title('Correlation Matrix')
+    plt.savefig("correlation_matrix.png")
     plt.show()
 
 #matrcorr(diabetesdf)
@@ -231,6 +244,7 @@ def scatterplt(dataframe, variavel_1, variavel_2, vcategorical = None):
     sns.scatterplot(data = dataframe, x = variavel_1, y = variavel_2, hue = vcategorical)
     plt.title(f"Scatterplot of {variavel_1} by {variavel_2} in order to {vcategorical}") if vcategorical is not None else plt.title(f"Scatterplot of {variavel_1} by {variavel_2}") 
     plt.legend()
+    plt.savefig("scatterplot.png")
     plt.show()
 
 #scatterplt(diabetesdf,"Glucose","BMI")
