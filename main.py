@@ -44,14 +44,14 @@ diabetes.insert(loc = 2, column = "GlycemiaValues", value = x)
 #função para todos os fins de opção perguntar se quer continuar ou terminar a analise
 def terminar():
     escolha = input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
-    escolha = escolha.lower().title()
+    escolha = escolha.lower()
 
-    while escolha != "Sim" and escolha != "Não" and escolha != "Nao":
+    while escolha not in ("sim" ,"não", "nao", "s","n"):
         print("Resposta inválida. Escreva 'Sim' para continuar a análise e 'Não' para terminar. \n")
         escolha=input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
-        escolha = escolha.lower().title()
+        escolha = escolha.lower()
 
-    if escolha == "Sim" :
+    if escolha == "sim" or escolha=="s":
         menu()
     else:
         exit()
@@ -60,24 +60,40 @@ def terminar():
 def menu():
     print("[Menu] Escolhe uma das seguintes opções:")
     print("     0 - Visualização da base de dados")
-    print("     1 - Análise individual de variáveis")
-    print("     2 - Análise conjunta de variáveis")
-    print("     3 - Interações e Correlações entre as variáveis")
-    print("     4 - Relatório geral da base de dados")
-    print("     5 - Sair")
+    print("     1 - Análise individual de variáveis numéricas")
+    print("     2 - Análise individual de variáveis categóricas")
+    print("     3 - Análise conjunta de variáveis")
+    print("     4 - Interações e Correlações entre as variáveis")
+    print("     5 - Relatório geral da base de dados")
+    print("     6 - Sair")
     opcoes_menu()
 
 def menu_opcao():
     print("            0: Pregnancies                    ")
     print("            1: Glucose                        ")
-    print("            2: GlycemiaValues                 ")
-    print("            3: BloodPressure                  ")
-    print("            4: SkinThickness                  ")
-    print("            5: Insulin                        ")
-    print("            6: BMI                            ")
-    print("            7: DiabetesPedigreeFunction       ")
-    print("            8: Age                            ")
-    print("            9: Outcome                        ")
+    print("            2: BloodPressure                  ")
+    print("            3: SkinThickness                  ")
+    print("            4: Insulin                        ")
+    print("            5: BMI                            ")
+    print("            6: DiabetesPedigreeFunction       ")
+    print("            7: Age                            ")
+
+def menu_opcao1b():
+    def print_menu_opcao1b():
+        print("           0: Variaveis numéricas                     ")
+        print("           1: Swarmplot                               ")
+        print("           2: Histograma com função densidade         ")
+
+    print_menu_opcao1b()
+    escolha2=int(input("       Escolha o gráfico que pretende visualizar:     "))
+    while escolha2 not in (1,2,0):
+        print("Resposta Inválida.")
+        print_menu_opcao1b()
+        escolha2=int(input("       Escolha o gráfico que pretende visualizar:     "))
+    return escolha2
+
+
+
 
 
 #opção 0 - visualização da data frame e de algumas informações relativas à mesma
@@ -101,12 +117,12 @@ def opcoes_menu():
             menu()
     
     elif opcao == 1:
-        dict_variaveis={0: "Pregnancies", 1: "Glucose", 2: "GlycemiaValues", 3: "BloodPressure", 4: "SkinThickness", 5: "Insulin", 6: "BMI", 7: "DiabetesPedigreeFunction", 8: "Age", 9:"Outcome"}
+        dict_variaveis={0: "Pregnancies", 1: "Glucose", 2: "BloodPressure", 3: "SkinThickness", 4: "Insulin", 5: "BMI", 6: "DiabetesPedigreeFunction", 7: "Age"}
         menu_opcao()
         variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima:"))
         
-        while variaveis <0 or variaveis> 9:
-            print("Tem de escolher um número válido, de 0 a 9.")
+        while variaveis <0 or variaveis> 7:
+            print("Tem de escolher um número válido, de 0 a 7.")
             variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima:"))
 
         list_variaveis=[]
@@ -118,12 +134,6 @@ def opcoes_menu():
         escolha= input("Deseja escolher outra variável para análise? Sim ou Não? \n")
         escolha=escolha.lower()
         while escolha not in ("não" ,"n","nao"):
-            #print("Resposta inválida. Escreva 'Sim' para continuar a análise e 'Não' para terminar. \n")
-            #escolha=input("Deseja escolher outra variável para análise? Sim ou Não? \n")
-            #escolha = escolha.lower()
-            
-            ##TODO: arranjar este problema, quando a resposta não é sim nem nao simplesmente termina e nao diz que é invalido e pede novamente
-
             if escolha in ("sim" , "s"):
                 menu_opcao()
                 variaveis= int(input("Escolha a variável que deseja analisar utilizando os números indicados no menu acima: "))
@@ -140,34 +150,56 @@ def opcoes_menu():
                 escolha= input("Deseja escolher outra variável para análise? Sim ou Não? \n")
                 escolha=escolha.lower()
             else:
-                break
+                print("Resposta inválida.")
+                escolha=input("Deseja escolher outra variável para análise? Sim ou Não? \n")
+                escolha = escolha.lower()
 
         list_converted=[dict_variaveis.get(v) for v in list_variaveis]
         print(list_converted)
-        """
-        outc_values(diabetesdf, vcategorical)
-        circular(diabetesdf, vcategorical)
-        
-        hist_vcat(diabetesdf, vcategorical,variaveis)
 
-        var_num(diabetesdf, variaveis)
-        swarmplotvar(diabetesdf, variaveis, vcategorical = None)
-        """
+        escolha2 = menu_opcao1b()
+        dict_vcateg={"o":"Outcome","g": "GlycemiaValues","n":"None"}
+        if escolha2==0:
+            var_num(diabetesdf, list_converted)
+            terminar()
+        elif escolha2==1:
+            vcategorical = input("Deseja fazer em função da variável Outcome (O), da variável GlycemiaValues (G) ou nenhum (N)? \n")
+            vcategorical=vcategorical.lower()
+            while vcategorical not in ("o" , "g", "n"):
+                print("Resposta Inválida.")
+                vcategorical = input("Deseja fazer em função da variável Outcome (O), da variável GlycemiaValues (G) ou nenhum (N)? \n")
+            vcategorical = dict_vcateg.get(vcategorical)
+            swarmplotvar(diabetesdf, list_converted, vcategorical) #damos a opção Outcome ou GlycemiaValues ou sem condicionante
+            terminar()   
+        elif escolha2==2:
+            vcategorical = input("Deseja fazer em função da variável Outcome (O), da variável GlycemiaValues (G)? \n")
+            vcategorical=vcategorical.lower()
+            while vcategorical not in ("o" , "g"):
+                print("Resposta Inválida.")
+                vcategorical = input("Deseja fazer em função da variável Outcome (O), da variável GlycemiaValues (G)? \n")
+            vcategorical = dict_vcateg.get(vcategorical)
+            hist_vcat(diabetesdf, vcategorical,list_converted) #damos a opção Outcome ou GlycemiaValues
+            terminar()
+
 
     #elif opcao == 2:
-    #    função3
     
     #elif opcao == 3:
-    #    função4
     
-    elif opcao == 4:
+    #elif opcao == 4:
+    
+    elif opcao == 5:
         #geração de um relatório automático sobre a analise da base de dados
         relatorio = ProfileReport(diabetesdf, title = "Data Analysis of Diabetes Report")
         diabetesdf.profile_report()
         relatorio.to_file("diabetes_report.html")
     
-    elif opcao == 5:
+    elif opcao == 6:
         exit()
     #else:
 
 menu()
+
+
+        #outc_values(diabetesdf, vcategorical) #damos a opçao Outcome ou GlycemiaValues
+        #circular(diabetesdf, vcategorical) #damos a opção Outcome ou GlycemiaValues
