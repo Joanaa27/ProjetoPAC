@@ -1,13 +1,17 @@
+#antes de iniciar e correr o código é necessário que estes pacotes estejam instalados
+#pode faze-lo usando a linha de codigo "pip3 install "nome do pacote" na linha de comandos
+
+#importação dos pacotes, previamente instalados na linha de comandos, atraves da linha de codigo anteriormente escrita
 import pandas as pd
 from pandas_profiling import ProfileReport
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-#importação de todas as funções dos ficheiros Funçoes e Plots, para que possam ser chamadas neste ficheiro main
+#importação de todas as funções do ficheiro Plots.py, para que possam ser chamadas neste ficheiro main
 from Plots import *
 
-#Leitura de base de dados
+#Leitura de base de dados e transformação desta em dataframe
 diabetes = pd.read_csv("diabetes.csv")
 diabetesdf = pd.DataFrame(diabetes)
 variaveis = diabetes.columns
@@ -42,7 +46,7 @@ diabetes.insert(loc = 2, column = "GlycemiaValues", value = x)
 
 ###FUNÇÕES###
 
-#função para todos os fins de opção perguntar se quer continuar ou terminar a analise
+#função para todos os fins de opção perguntar se quer continuar ou terminar a analise, e mostrar novamente o menu ou sair, respetivamente
 def terminar():
     escolha = input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
     escolha = escolha.lower()
@@ -57,6 +61,7 @@ def terminar():
     else:
         exit()
 
+#função para dar print ao menu e chamar a função opcoes_menu para que seja pedido o input e executado todo o codigo referente ao menu e às suas opcoes
 def menu():
     print("[Menu] Escolhe uma das seguintes opções:")
     print("     0 - Visualização da base de dados")
@@ -69,6 +74,7 @@ def menu():
     print("     7 - Sair")
     opcoes_menu()
 
+#função que dá print ao menu das variáveis numéricas
 def menu_opcao():
     print("            0: Pregnancies                    ")
     print("            1: Glucose                        ")
@@ -79,6 +85,8 @@ def menu_opcao():
     print("            6: DiabetesPedigreeFunction       ")
     print("            7: Age                            ")
 
+#função com outra função incorporada, esta segunda dá print ao menu dentro da opção 1, mostrando os gráficos possíveis de executar e visualizar,
+#a função principal faz ainda as verificações do input dado pelo utilizador, retornando por fim a escolha do utilizador face ao menu apresentado
 def menu_opcao1b():
     def print_menu_opcao1b():
         print("           0: Representação estatística e gráfica     ")
@@ -93,6 +101,8 @@ def menu_opcao1b():
         escolha2 = int(input("       Escolha o gráfico que pretende visualizar:     "))
     return escolha2
 
+#função com outra função incorporada, esta segunda dá print ao menu dentro da opção 2, mostrando as duas variaveis categoricas que o utilizador pode escolher,
+#a função principal faz as verificações do input dado pelo utilizador, retornando por fim a escolha do utilizador face ao menu apresentado
 def menu_opcao2():
     def print_menu_opcao2():
         print("G: GlycemiaValues")
@@ -106,6 +116,8 @@ def menu_opcao2():
         escolha3=input("Escolha a variável que pretende analisar, do menu acima:  ")
     return escolha3
 
+#função com outra função incorporada, esta segunda dá print ao menu dentro da opção 3, mostrando duas opções de gráficos que o utilizador pode escolher,
+#a função principal faz as verificações do input dado pelo utilizador, retornando por fim a escolha do utilizador face ao menu apresentado
 def menu_categoricas():
     def print_menu_2b():
         print("0: Gráfico de Barras")
@@ -118,6 +130,8 @@ def menu_categoricas():
         escolha3b = int(input("Escolha o gráfico do menu acima que pretende visualizar:  "))
     return escolha3b
 
+#função com outra função incorporada, esta segunda dá print ao menu dentro da opção 3, mostrando quatro opções de gráficos que o utilizador pode escolher,
+#a função principal faz mais uma vez as verificações do input dado pelo utilizador, retornando por fim a escolha do utilizador face ao menu apresentado
 def menu_3():
     def print_menu3():
         print("    0: Boxplot                            ")
@@ -132,6 +146,8 @@ def menu_3():
         escolha4 = int(input("Escolha o gráfico do menu acima que pretende visualizar:  "))
     return escolha4
 
+#função que recolhe as variaveis que o utilizador pretende analisar seja 1 ou mais, podendo escolher até mesmo todas, esta função inclui varias verificações,
+#incluindo ainda um dicionário que converte o número que o utilizador escolher numa string com o nome da variavel ou variavies, esta função é amplamente utilizada nos diversos graficos
 def get_lista_variaveis():
     dict_variaveis = {0: "Pregnancies", 1: "Glucose", 2: "BloodPressure", 3: "SkinThickness", 4: "Insulin", 5: "BMI", 6: "DiabetesPedigreeFunction", 7: "Age"}
     menu_opcao()
@@ -172,6 +188,8 @@ def get_lista_variaveis():
     print(list)
     return list_converted
 
+#função com dicionário incorporado para converter a letra do input do utilizador para uma das duas variaveis categoricas (outcome e glycemiavalues) ou none,
+#contem as respetivas verificações, retornando a escolha do utilizador a ser usado na execução dos gráficos
 def varcategorical():
     dict_vcateg = {"o" : "Outcome", "g" : "GlycemiaValues", "n" : None}
     vcategorical = input("Deseja fazer em função da variável Outcome (O), da variável GlycemiaValues (G) ou Nenhuma (N)? \n")
@@ -182,6 +200,8 @@ def varcategorical():
     vcategorical = dict_vcateg.get(vcategorical)
     return vcategorical
 
+#esta função é semelhante à funçao varcategorical (definida acima) mas sem o valor none, pois alguns graficos não permitem a escolha de none
+#apenas de uma das duas variaveis categoricas (outcome e glycemiavalues) 
 def categorical_without_n():
     dict_Wnone = {"o" : "Outcome", "g" : "GlycemiaValues"}
     vcategorical = input("Deseja fazer em função da variável Outcome (O), da variável GlycemiaValues (G)? \n")
@@ -192,6 +212,9 @@ def categorical_without_n():
     vcategorical = dict_Wnone.get(vcategorical)
     return vcategorical
 
+#função que permite ao utilizador escolher as variaveis que vai querer eliminar da visualização de alguns graficos que assim o permitem, nomeadamente na
+#opcao 4 do menu, esta função utiliza a funçao get_lista_variaveis definida anteriormente e faz tambem as verificações necessarias do input, retornando 
+#a lista de variaveis a eliminar da analise + a variavel glycemiavalues, pois esta nao faz sentido no contexto grafico onde a funçao é chamada
 def dropval():
     drop_values = []
     valores_drop = input("Deseja eliminar alguma variável da análise? Sim ou Não? \n")
@@ -208,6 +231,7 @@ def dropval():
     drop_values.append("GlycemiaValues")
     return drop_values
 
+#função que permite ao utilizador escolher se pretende fazer certos gráficos, nomeadamente da opção 3, em função da variavel categorica outcome, devolvendo esta escolha
 def outcom():        
     has_outcome = False
     outc = input("Deseja fazer em função da variável 'Outcome'? Sim ou Não?")
@@ -223,6 +247,8 @@ def outcom():
     
     return has_outcome
 
+#função com outra função incorporada, esta segunda dá print ao menu dentro da opção 4, mostrando tres opções de gráficos que o utilizador pode escolher,
+#a função principal faz mais uma vez as verificações do input dado pelo utilizador, retornando por fim a escolha do utilizador face ao menu apresentado
 def menu_4():
     def print_menu4():
         print("    0: Regressão linear")
@@ -236,6 +262,9 @@ def menu_4():
         escolha5 = int(input("Escolha o gráfico do menu acima que pretende visualizar:  "))
     return escolha5
 
+#função que utiliza novamente um dicionario que converte os numeros dados pelo utilizador nas variaveis numericas que o mesmo deseja analisar, esta função
+#pede apenas 1 variavel, para ser usado nos graficos da opção 4, nomeadamente o de dispersão, esta função utiliza outra função já definida (menu_opcao) para
+#dar novamente print das variaveis numericas
 def variavel():
     dict_variaveis = {0: "Pregnancies", 1: "Glucose", 2: "BloodPressure", 3: "SkinThickness", 4: "Insulin", 5: "BMI", 6: "DiabetesPedigreeFunction", 7: "Age"}
     menu_opcao()
@@ -248,6 +277,8 @@ def variavel():
     variavel_x = dict_variaveis.get(variaveis)
     return variavel_x
 
+#função com outra função incorporada, esta segunda dá print ao menu dentro da opção 5, mostrando cinco opções de cálculos que o utilizador pode escolher,
+#a função principal faz mais uma vez as verificações do input dado pelo utilizador, retornando por fim a escolha do utilizador face ao menu apresentado
 def menu_5():
     def print_menu5():
         print("    0: Média")
@@ -255,7 +286,6 @@ def menu_5():
         print("    2: Mediana")
         print("    3: Variância")
         print("    4: Desvio Padrão")
-
     print_menu5()
     escolha6 = int(input("Escolha o cálculo do menu acima que pretende efetuar:  "))
     while escolha6 not in (0, 1, 2, 3, 4):
@@ -264,6 +294,7 @@ def menu_5():
         escolha6 = int(input("Escolha o cálculo do menu acima que pretende efetuar:  "))
     return escolha6
 
+#função que permite ao utilizador escolher guardar ou não em ficheiro de texto (.txt) os calculos executados na opção 5 do menu
 def save_file(calcs_to_write):
     decisao = input("Deseja guardar o cálculo num ficheiro? Sim ou Não? \n")
     decisao = decisao.lower()
@@ -281,7 +312,8 @@ def save_file(calcs_to_write):
 
 ### MENU ###
 
-#opção 0 - visualização da data frame e de algumas informações relativas à mesma
+#estrutura de decisão das opções do menu que incorpora as funções dos plots e permite a visualização, analise e calculo (podem ser guardados em ficheiros .txt) 
+#da base de dados e respetivos graficos e tabelas
 def opcoes_menu():
     opcao = int(input("Opção:"))
     while opcao < 0 or opcao > 7:
@@ -294,7 +326,7 @@ def opcoes_menu():
         print(diabetesdf.info())
         opcaoa = int(input("Pretende ainda visualizar:\n 0- Tabela com as primeiras 20 observações \n 1- Tabela com medidas estatísticas das variáveis \n 2- Voltar ao Menu Principal \n Opção:"))
         if opcaoa == 0:
-            print(f"Tabela com as primeiras 20 observações da base de dados\n {tabelas(diabetesdf, 11)}")
+            print(f"Tabela com as primeiras 20 observações da base de dados\n {tabelas(diabetesdf, 1)}")
             terminar()
         elif opcaoa == 1:
             print(f"Tabela com as medidas estatísticas das variáveis \n {tabelas(diabetesdf, 2)}")
@@ -322,7 +354,7 @@ def opcoes_menu():
     elif opcao == 2:
         escolha3b = menu_categoricas()
         escolha3 = menu_opcao2()
-        dict_vcateg = {"o": "Outcome", "g" : "GlycemiaValues", "n" : None}
+        dict_vcateg = {"o": "Outcome", "g" : "GlycemiaValues"}
         if escolha3b == 0:
             if escolha3 == "g":
                 categorica_values(diabetesdf, dict_vcateg.get(escolha3))
@@ -367,6 +399,8 @@ def opcoes_menu():
             variavel_1 = variavel()
             print("Variável do eixo dos yy")
             variavel_2 = variavel()
+
+            #este ciclo nao permite que as variaveis sejam iguais, uma vez que esta analise nao faz sentido do ponto de vista estatistico
             while variavel_2 == variavel_1:
                 print("As variáveis não podem ser iguais.")
                 print("Variável do eixo dos yy")
