@@ -62,12 +62,14 @@ def var_num(dataframe, variaveis):
 def hist_total(dataframe,has_outcome = False):
     variaveis = dataframe.columns
     print(variaveis)
-    counter = 0
+    counter = 1
     for i in variaveis:
-        counter += 1
+        
         print(counter, ':', i)
-        plt.subplot(2,4,counter)
+        plt.subplot(2,5,counter)
         sns.histplot(data = dataframe, x = dataframe[str(i)], hue = "Outcome", multiple  = 'dodge', kde = True) if has_outcome else sns.histplot(data = dataframe, x = dataframe[str(i)], multiple  = 'dodge', kde = True)
+        counter += 1
+    
     plt.suptitle("Histogram of all variables by Outcome", fontsize = 16) if has_outcome else plt.suptitle("Histogram of all variables", fontsize = 16)
     plt.plot()
     plt.savefig("histogram_all.png")

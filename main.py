@@ -169,7 +169,7 @@ def get_lista_variaveis():
             escolha = escolha.lower()
 
     list_converted=[dict_variaveis.get(v) for v in list_variaveis]
-    print(list_converted)
+    print(list)
     return list_converted
 
 def varcategorical():
@@ -225,8 +225,8 @@ def outcom():
 
 def menu_4():
     def print_menu4():
-        print("    0: Gráficos de dispersão")
-        print("    1: Regressão linear     ")
+        print("    0: Regressão linear")
+        print("    1: Gráficos de dispersão")
         print("    2: Matriz de correlações")
     print_menu4()
     escolha5=int(input("Escolha o gráfico do menu acima que pretende visualizar:  "))
