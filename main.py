@@ -52,7 +52,7 @@ def terminar():
         escolha=input("Deseja continuar a análise estatística? Escreva 'Sim' para continuar ou 'Não' para terminar \n")
         escolha = escolha.lower()
 
-    if escolha == "sim" or escolha=="s":
+    if escolha in ("sim" ,"s"):
         menu()
     else:
         exit()
@@ -153,7 +153,6 @@ def get_lista_variaveis():
         if escolha in ("sim" , "s"):
             menu_opcao()
             variaveis= int(input("Escolha a variável utilizando os números indicados no menu acima: \n"))
-            print(variaveis)
             while variaveis <0 or variaveis> 7:
                 print("Tem de escolher um número válido, de 0 a 7.")
                 menu_opcao()
@@ -170,6 +169,7 @@ def get_lista_variaveis():
             escolha = escolha.lower()
 
     list_converted=[dict_variaveis.get(v) for v in list_variaveis]
+    print(list_converted)
     return list_converted
 
 def varcategorical():
@@ -180,6 +180,16 @@ def varcategorical():
         print("Resposta Inválida.")
         vcategorical = input("Deseja fazer em função da variável Outcome (O), da variável GlycemiaValues (G) ou Nenhuma (N)? \n")
     vcategorical = dict_vcateg.get(vcategorical)
+    return vcategorical
+
+def categorical_without_n():
+    dict_Wnone={"o":"Outcome","g": "GlycemiaValues"}
+    vcategorical = input("Deseja fazer em função da variável Outcome (O), da variável GlycemiaValues (G)? \n")
+    vcategorical=vcategorical.lower()
+    while vcategorical not in ("o" , "g"):
+        print("Resposta Inválida.")
+        vcategorical = input("Deseja fazer em função da variável Outcome (O), da variável GlycemiaValues (G)? \n")
+    vcategorical = dict_Wnone.get(vcategorical)
     return vcategorical
 
 def dropval():
@@ -238,6 +248,39 @@ def variavel():
     variavel_x=dict_variaveis.get(variaveis)
     return variavel_x
 
+def menu_5():
+    def print_menu5():
+        print("    0: Média")
+        print("    1: Média Ponderada")
+        print("    2: Mediana")
+        print("    3: Moda")
+        print("    4: Variância")
+        print("    5: Desvio Padrão")
+        print("    6: Assimetria")
+
+    print_menu5()
+    escolha6=int(input("Escolha o cálculo do menu acima que pretende efetuar:  "))
+    while escolha6 not in (0,1,2,3,4,5,6):
+        print("Resposta inválida.")
+        print_menu5()
+        escolha6=int(input("Escolha o cálculo do menu acima que pretende efetuar:  "))
+    return escolha6
+
+def save_file(calcs_to_write):
+    decisao=input("Deseja guardar o cálculo num ficheiro? Sim ou Não? \n")
+    decisao = decisao.lower()
+
+    while decisao not in ("sim" ,"não", "nao", "s","n"):
+        print("Resposta inválida. Escreva 'Sim' para guardar o cálculo e 'Não' para não guardar. \n")
+        decisao=input("Deseja guardar o cálculo num ficheiro? Sim ou Não? \n")
+        decisao = decisao.lower()
+
+    if decisao in ("sim" ,"s"):
+        nome=input("Escolha o nome do seu ficheiro: ")
+        new_file = open(f"{nome}.txt", "w")
+        new_file.writelines(calcs_to_write)
+        new_file.close()
+
 ### MENU ###
 
 #opção 0 - visualização da data frame e de algumas informações relativas à mesma
@@ -274,7 +317,7 @@ def opcoes_menu():
             swarmplotvar(diabetesdf, list_converted, vcategorical) #damos a opção Outcome ou GlycemiaValues ou sem condicionante
             terminar()   
         elif escolha2==2:
-            vcategorical=varcategorical()
+            vcategorical=categorical_without_n()
             hist_vcat(diabetesdf, vcategorical,list_converted) #damos a opção Outcome ou GlycemiaValues
             terminar()
 
@@ -303,7 +346,6 @@ def opcoes_menu():
         if escolha4==0:
             drop_values = dropval()
             has_outcome = outcom()
-            
             boxplot_all(diabetesdf, drop_values, has_outcome)
             terminar()
         elif escolha4==1:
@@ -350,6 +392,80 @@ def opcoes_menu():
 
         else:
             matrcorr(diabetesdf)
+            terminar()
+
+    elif opcao == 5:
+        lista=get_lista_variaveis()
+        escolha6=menu_5()
+        if escolha6==0:
+            list_calcs_to_write=[]
+            for c in lista:
+                lista_valores=diabetesdf[c].values
+                print(f"Média da variável {c}")
+                calc_valor = np.mean(lista_valores).round(2)
+                print(calc_valor)
+                list_calcs_to_write.append(f"Media da variavel {c}: {calc_valor} \n")
+            save_file(list_calcs_to_write)
+            terminar()
+        elif escolha6==1:
+            list_calcs_to_write=[]
+            for c in lista:
+                lista_valores=diabetesdf[c].values
+                print(f"Média ponderada da variável {c}")
+                calc_valor = np.average(lista_valores).round(2)
+                print(calc_valor)
+                list_calcs_to_write.append(f"Media ponderada da variavel {c}: {calc_valor} \n")
+            save_file(list_calcs_to_write)
+            terminar()
+        elif escolha6==2:
+            list_calcs_to_write=[]
+            for c in lista:
+                lista_valores=diabetesdf[c].values
+                print(f"Mediana da variável {c}")
+                calc_valor = np.median(lista_valores).round(2)
+                print(calc_valor)
+                list_calcs_to_write.append(f"Mediana da variavel {c}: {calc_valor} \n")
+            save_file(list_calcs_to_write)
+            terminar()
+        elif escolha6==3:
+            list_calcs_to_write=[]
+            for c in lista:
+                lista_valores=diabetesdf[c].values
+                print(f"Moda da variável {c}")
+                calc_valor = lista_valores.mode.round(2)
+                print(calc_valor)
+                list_calcs_to_write.append(f"Moda da variavel {c}: {calc_valor} \n")
+            save_file(list_calcs_to_write)
+            terminar()
+        elif escolha6==4:
+            list_calcs_to_write=[]
+            for c in lista:
+                lista_valores=diabetesdf[c].values
+                print(f"Variância da variável {c}")
+                calc_valor=np.var(lista_valores).round(2)
+                print(calc_valor)
+                list_calcs_to_write.append(f"Variancia da variavel {c}: {calc_valor} \n")
+            save_file(list_calcs_to_write)
+            terminar()
+        elif escolha6==5:
+            list_calcs_to_write=[]
+            for c in lista:
+                lista_valores=diabetesdf[c].values
+                print(f"Desvio padrão da variável {c}")
+                calc_valor=np.std(lista_valores,ddof=1).round(2)
+                print(calc_valor)
+                list_calcs_to_write.append(f"Desvio padrao da variavel {c}: {calc_valor} \n")
+            save_file(list_calcs_to_write)
+            terminar()
+        elif escolha6==6:
+            list_calcs_to_write=[]
+            for c in lista:
+                lista_valores=diabetesdf[c].values
+                print(f"Assimetria da variável {c}")
+                calc_valor=lista_valores.skew.round(2)
+                print(calc_valor)
+                list_calcs_to_write.append(f"Assimetria da variavel {c}: {calc_valor} \n")
+            save_file(list_calcs_to_write)
             terminar()
 
     elif opcao == 6:

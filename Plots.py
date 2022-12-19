@@ -61,11 +61,12 @@ def var_num(dataframe, variaveis):
 #histograma e função densididade de TODAS as variaveis em função do "Outcome" e "GlycemiaValues"
 def hist_total(dataframe,has_outcome = False):
     variaveis = dataframe.columns
+    print(variaveis)
     counter = 0
     for i in variaveis:
         counter += 1
         print(counter, ':', i)
-        plt.subplot(3, 3, counter)
+        plt.subplot(2,4,counter)
         sns.histplot(data = dataframe, x = dataframe[str(i)], hue = "Outcome", multiple  = 'dodge', kde = True) if has_outcome else sns.histplot(data = dataframe, x = dataframe[str(i)], multiple  = 'dodge', kde = True)
     plt.suptitle("Histogram of all variables by Outcome", fontsize = 16) if has_outcome else plt.suptitle("Histogram of all variables", fontsize = 16)
     plt.plot()
@@ -243,31 +244,8 @@ def scatterplt(dataframe, variavel_1, variavel_2, vcategorical = None):
     print(f"Variável no eixo dos xx: {variavel_1} \nVariável no eixo dos yy: {variavel_2}")
     sns.scatterplot(data = dataframe, x = variavel_1, y = variavel_2, hue = vcategorical)
     plt.title(f"Scatterplot of {variavel_1} by {variavel_2} in order to {vcategorical}") if vcategorical is not None else plt.title(f"Scatterplot of {variavel_1} by {variavel_2}") 
-    plt.legend()
     plt.savefig("scatterplot.png")
     plt.show()
 
 #scatterplt(diabetesdf,"Glucose","BMI")
 #scatterplt(diabetesdf,"Glucose","BMI","GlycemiaValues")
-
-#######################################################################################
-#Histogramas + boxplots (lado a lado) para uma variável numerica em função do outcome
-def histpx(dataframe):
-    fig = px.histogram(dataframe, x = 'Glucose',
-                    color = 'Outcome',
-                    marginal = 'box',
-                    barmode= 'overlay',
-                    histnorm = 'density'
-                    )
-
-    fig.update_layout(
-        title_font_color="black",
-        legend_title_font_color="green",
-        title={
-            'text': "Glucose Histogram per Outcome",
-            'x':0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'},
-    )
-    #fig.show()
-#Problema: abre uma página no navegador e temos de ver se é dessa maneira que queremos visualizar o gráfico
