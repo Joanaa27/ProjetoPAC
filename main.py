@@ -485,7 +485,8 @@ def opcoes_menu():
         relatorio = ProfileReport(diabetesdf, title = "Relatório da Análise da Base de Dados Diabetes")
         diabetesdf.profile_report()
         relatorio.to_file("diabetes_report.html")
-    
+        terminar()
+
     elif opcao == 7:
         exit()
 
